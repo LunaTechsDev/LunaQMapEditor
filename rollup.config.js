@@ -41,6 +41,7 @@ const options = {
         { src: 'app/*.html', dest: 'dist/' },
         { src: 'app/imgs/**/*', dest: 'dist/imgs' },
         { src: 'app/css/**/*', dest: 'dist/css' },
+        { src: 'app/HELP.md', dest: 'dist/' },
       ]
     })
   ]
