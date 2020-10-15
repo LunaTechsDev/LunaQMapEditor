@@ -47,6 +47,7 @@ const options = {
 }
 
 const fs = require('fs')
+const path = require('path')
 const {
   name, version, main, author, description, license, dependencies
 } = require('./package.json')
@@ -61,8 +62,11 @@ const distPkg = {
   dependencies
 }
 
-fs.writeFileSync('./dist/package.json', JSON.stringify(distPkg, null, 2))
+if (fs.existsSync('./dist/') === false) {
+  fs.mkdirSync('./dist/')
+}
 
+fs.writeFileSync(path.resolve('./dist/', 'package.json'), JSON.stringify(distPkg, null, 2))
 
 export default [
   {
