@@ -99,20 +99,19 @@ export default class ToolbarProperties extends React.Component {
     this.updateProperty(prop, String(value));
   }
   openFile = () => {
-    remote.dialog.showOpenDialog({
+    const filePaths = remote.dialog.showOpenDialog({
       title: 'Select Image',
       defaultPath: this.props.mapObject.filePath,
       filters: [{
         name: 'Images',
         extensions: ['jpg', 'png']
       }]
-    }, (filePaths) => {
+    })
       if (!filePaths) return;
       let filePath = path.relative(this.props.projectPath, filePaths[0]);
       this.updateProperty('isQSprite', Store.isQSprite(filePath));
       this.updateProperty('pose', '');
       this.updateProperty('filePath', filePath);
-    })
   }
   openSelectCondition = (e) => {
     const {
