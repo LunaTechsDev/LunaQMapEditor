@@ -1,5 +1,5 @@
 import React from 'react'
-import Store from '../store'
+import Store from '../store/index'
 import Stage from '../display/stage'
 
 import { ipcRenderer, remote } from 'electron'
@@ -11,14 +11,15 @@ export default class Menubar extends React.Component {
     ipcRenderer.on('focus', this.onFocus);
   }
   openLoad = () => {
-    remote.dialog.showOpenDialog({
+    const files = remote.dialog.showOpenDialog({
       title: 'Open Project',
       defaultPath: this.props.projectPath,
       filters: [{
         name: 'RPG Maker MV Project',
         extensions: ['rpgproject', 'rmmzproject']
       }]
-    }, Store.load);
+    })
+    Store.load(files);
   }
   startWatch(file, projectFile) {
     fs.stat(file, (err, stats) => {
