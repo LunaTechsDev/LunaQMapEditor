@@ -2,10 +2,10 @@ import React from 'react'
 import Store from '../store'
 import { observer } from 'mobx-react'
 
-import MapList from './toolbarMapList'
-import ObjList from './toolbarObjList'
-import Properties from './toolbarProperties'
-import ContextMenu from './contextMenu'
+import MapList from './toolbarMapList.jsx'
+import ObjList from './toolbarObjList.jsx'
+import Properties from './toolbarProperties.jsx'
+import ContextMenu from './contextMenu.jsx'
 
 @observer
 export default class Toolbar extends React.Component {

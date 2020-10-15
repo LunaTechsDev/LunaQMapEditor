@@ -4,8 +4,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import Store from './store'
-import Style from './style'
-import Layout from './components/layout'
+import './style/index'
+import Layout from './components/layout.jsx'
 
 
 ReactDOM.render(

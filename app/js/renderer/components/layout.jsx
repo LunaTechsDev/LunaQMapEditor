@@ -1,10 +1,10 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 
-import Menubar from './menubar'
-import Toolbar from './toolbar'
-import Canvas from './canvas'
-import Notifications from './notifications'
+import Menubar from './menubar.jsx'
+import Toolbar from './toolbar.jsx'
+import Canvas from './canvas.jsx'
+import Notifications from './notifications.jsx'
 
 @observer
 export default class Layout extends React.Component {
