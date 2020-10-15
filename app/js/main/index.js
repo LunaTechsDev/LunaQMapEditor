@@ -6,8 +6,8 @@ try {
 }
 
 if (process.env.PRODUCTION === false) {
-  require('electron-reload')('../', {
-    electron: require(`../../../node_modules/electron`)
+  require('electron-reload')('../../', {
+    electron: require(`../../../../node_modules/electron`)
   });
 }
 
