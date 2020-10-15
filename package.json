@@ -44,14 +44,6 @@
     "directories": {
       "app": "dist"
     },
-    "mac": {
-      "target": "dmg",
-      "icon": "app/imgs/icon.ico"
-    },
-    "linux": {
-      "target": "snap",
-      "icon": "app/imgs/icon.ico"
-    },
     "win": {
       "target": "nsis",
       "icon": "app/imgs/icon.ico"
