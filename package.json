@@ -11,8 +11,8 @@
   },
   "scripts": {
     "start": "electron ./dist/ --dev",
-    "compile": "rollup -c",
-    "build": "rollup -c & build --x64 --ia32 -p always"
+    "compile": "rollup -c & build --x64 --ia32 -p always",
+    "build": "rollup -c"
   },
   "dependencies": {
     "electron-reload": "^1.5.0",
