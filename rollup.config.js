@@ -51,7 +51,7 @@ const {
   name, version, main, author, description, license, dependencies
 } = require('./package.json')
 
-const pkg = {
+const distPkg = {
   name,
   version,
   main: './js/main/main.js',
@@ -61,7 +61,7 @@ const pkg = {
   dependencies
 }
 
-fs.writeFileSync('./dist/package.json', JSON.stringify(pkg, null, 2))
+fs.writeFileSync('./dist/package.json', JSON.stringify(distPkg, null, 2))
 
 
 export default [
