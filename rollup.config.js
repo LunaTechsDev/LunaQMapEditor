@@ -68,14 +68,14 @@ export default [
   {
     input: './app/js/main/main.js',
     output: [
-      { file: 'dist/js/main/main.js', format: 'cjs' }
+      { file: 'dist/js/main/main.js', format: 'cjs', sourcemap: true, }
     ],
     ...options
   },
   {
     input: './app/js/renderer/app.js',
     output: [
-      { file: 'dist/js/renderer/app.js', format: 'cjs' },
+      { file: 'dist/js/renderer/app.js', format: 'cjs', sourcemap: true, },
     ],
     ...options
   }
