@@ -10,7 +10,8 @@
     "url": "https://github.com/Quxios/QMapEditor.git"
   },
   "scripts": {
-    "start": "npx electron . --dev",
+    "start": "electron ./dist/ --dev",
+    "compile": "rollup -c",
     "build": "rollup -c & build --x64 --ia32 -p always"
   },
   "dependencies": {
