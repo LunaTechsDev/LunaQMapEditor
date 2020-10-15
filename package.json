@@ -1,6 +1,6 @@
 {
   "name": "QMapEditor",
-  "version": "4.0.1",
+  "version": "4.1.1",
   "main": "app/js/main/index.js",
   "author": "Quxios",
   "description": "Map Editor",
@@ -43,6 +43,14 @@
   "build": {
     "directories": {
       "app": "dist"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "app/imgs/icon.ico"
+    },
+    "linux": {
+      "target": "snap",
+      "icon": "app/imgs/icon.ico"
     },
     "win": {
       "target": "nsis",
