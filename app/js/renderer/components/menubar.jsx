@@ -16,7 +16,7 @@ export default class Menubar extends React.Component {
       defaultPath: this.props.projectPath,
       filters: [{
         name: 'RPG Maker MV Project',
-        extensions: ['rpgproject']
+        extensions: ['rpgproject', 'rmmzproject']
       }]
     }, :: Store.load);
   }
