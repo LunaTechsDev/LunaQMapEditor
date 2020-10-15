@@ -99,7 +99,7 @@ export default class ToolbarProperties extends React.Component {
     this.updateProperty(prop, String(value));
   }
   openFile = () => {
-    const filePaths = remote.dialog.showOpenDialog({
+    const filePaths = remote.dialog.showOpenDialogSync({
       title: 'Select Image',
       defaultPath: this.props.mapObject.filePath,
       filters: [{

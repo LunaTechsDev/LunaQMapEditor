@@ -78,5 +78,20 @@ export default [
       { file: 'dist/js/renderer/app.js', format: 'cjs', sourcemap: true, },
     ],
     ...options
+  },
+  // @todo Remove the need to bundle each new window created by electron
+  {
+    input: './app/js/renderer/selectFrame.js',
+    output: [
+      { file: 'dist/js/renderer/selectFrame.js', format: 'cjs', sourcemap: true, },
+    ],
+    ...options
+  },
+  {
+    input: './app/js/renderer/selectCondition.js',
+    output: [
+      { file: 'dist/js/renderer/selectCondition.js', format: 'cjs', sourcemap: true, },
+    ],
+    ...options
   }
 ]

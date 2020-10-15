@@ -10,7 +10,7 @@ export default class Layout extends React.Component {
     }
   }
   componentDidMount() {
-    window.onresize = ::this.onResize;
+    window.onresize = this.onResize.bind(this);
   }
   onResize() {
     this.setState({ height: window.innerHeight });

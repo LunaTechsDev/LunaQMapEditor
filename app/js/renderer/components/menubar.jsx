@@ -11,7 +11,7 @@ export default class Menubar extends React.Component {
     ipcRenderer.on('focus', this.onFocus);
   }
   openLoad = () => {
-    const files = remote.dialog.showOpenDialog({
+    const files = remote.dialog.showOpenDialogSync({
       title: 'Open Project',
       defaultPath: this.props.projectPath,
       filters: [{
