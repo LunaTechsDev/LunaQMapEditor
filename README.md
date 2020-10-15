@@ -1,25 +1,20 @@
-**NO LONGER SUPPORTED**
-
-## QMap Editor 4.0.1
+## Luna QMap Editor
 
 ## How to run
+Download a [prebuilt](https://github.com/lunatechsdev/LunaQMapEditor/releases/latest) then run
+the QMapEditor shortcut or .exe in the app folder
+
 **With Electron**
 
 1. Download or Clone the repo
 2. Open command prompt and cd to the folder containing package.json ( not the package.json inside the app folder! )
 3. Install the dependencies by using the cli
 
- `npm install`
+ ```npm install```
 
 4. Run the app with electron by using the cli
 
- `npm start`
-
-
-**From prebuild**
-
-Download a [prebuilt](https://github.com/quxios/QMapEditor/releases/latest) then run
-the QMapEditor shortcut or .exe in the app folder
+ ```npm start```
 
 ## Building
 Two Scripts are included to build:
