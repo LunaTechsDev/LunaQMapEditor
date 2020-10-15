@@ -3,9 +3,7 @@ import { autoUpdater } from 'electron-updater'
 import { saveData } from './appData'
 import { windows, forEachWindow, createWindow } from './windows'
 
-require('electron-reload')('../', {
-  electron: require(`../../../node_modules/electron`)
-});
+
 function start() {
   let mainWin = createWindow('main', 'index.html', {
     resizable: true,

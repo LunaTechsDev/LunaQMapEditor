@@ -18,7 +18,7 @@ export default class Menubar extends React.Component {
         name: 'RPG Maker MV Project',
         extensions: ['rpgproject', 'rmmzproject']
       }]
-    }, :: Store.load);
+    }, Store.load);
   }
   startWatch(file, projectFile) {
     fs.stat(file, (err, stats) => {

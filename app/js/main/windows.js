@@ -25,7 +25,8 @@ function createWindow(key, filePath, options) {
     show: false,
     webPreferences: {
       devTools: (process.argv || []).indexOf('--dev') !== -1,
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule: true
     },
     ...options
   })
