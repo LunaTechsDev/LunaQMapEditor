@@ -5,10 +5,8 @@ try {
   process.env.PRODUCTION = true;
 }
 
-if (process.env.PRODUCTION === false) {
-  require('electron-reload')('../../', {
-    electron: require(`../../../../node_modules/electron`)
-  });
+if ((process.argv || []).indexOf('--dev') !== -1 || process.env.NODE_ENV === 'development') {
+  require('electron-reload')('./')
 }
 
-require('./main.js');
+import './main.js';

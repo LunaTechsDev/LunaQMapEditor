@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Main Process",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "preLaunchTask": "npm: build",
+      "args": ["./dist/", "--dev"],
+      "outputCapture": "std"
+    },
+    {
+      "type": "electron",
+      "request": "launch",
+      "name": "Launch",
+      "appDir": "${workspaceFolder}/",
+       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "sourceMaps": true
+    },
+    {
+      "type": "electron",
+      "request": "launch",
+      "name": "Launch Dist",
+      "appDir": "${workspaceFolder}/dist/",
+      "preLaunchTask": "npm: build",
+      "runtimeArgs": ["--dev"],
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "windows": {
+        "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+      },
+      "sourceMaps": true
+    }
+  ]
+}

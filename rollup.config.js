@@ -71,7 +71,7 @@ fs.writeFileSync(path.resolve('./dist/', 'package.json'), JSON.stringify(distPkg
 
 export default [
   {
-    input: './app/js/main/main.js',
+    input: './app/js/main/index.js',
     output: [
       { file: 'dist/js/main/main.js', format: 'cjs', sourcemap: true, }
     ],
