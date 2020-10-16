@@ -5,11 +5,11 @@ import { observer } from "mobx-react";
 @observer
 export default class RecentProject extends React.Component {
   render() {
-    const { isLoaded, clickHandler, clearHandler } = this.props;
+    const { isLoaded, clickHandler } = this.props;
     const paths = Store.getUserData("recentProjectPaths");
     let items = paths.map((path, index) => (
       <li key={index}>
-        <button onClick={this.clickHandler}>{path}</button>
+        <button onClick={() => clickHandler(path)}>{path}</button>
       </li>
     ));
     const clearList = () => {
