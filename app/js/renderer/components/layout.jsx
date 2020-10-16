@@ -2,6 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 
 import Menubar from './menubar.jsx'
+import Welcome from './welcome.jsx'
 import Toolbar from './toolbar.jsx'
 import Canvas from './canvas.jsx'
 import Notifications from './notifications.jsx'
@@ -34,9 +35,12 @@ export default class Layout extends React.Component {
           isLoaded={isLoaded}
           projectPath={projectPath}
           currentMap={currentMap}
-        />
+          />
+        { isLoaded === false && <Welcome/> }
         { isLoaded && <Toolbar store={this.props.store} /> }
-        <Canvas currentMap={currentMap} currentMapObj={currentMapObj} />
+        { isLoaded &&
+          <Canvas currentMap={currentMap} currentMapObj={currentMapObj} />
+          }
         <Notifications notifications={notifications} />
       </div>
     )
