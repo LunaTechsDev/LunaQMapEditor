@@ -1,6 +1,6 @@
 import React from 'react'
 import Store from './../store'
-import { screen } from 'electron'
+import { remote } from 'electron'
 import path from 'path';
 
 import Stage from './../display/stage'
@@ -25,7 +25,7 @@ export default class Canvas extends React.Component {
     Store.updateInput();
   }
   updateDrag() {
-    const { x, y } = screen.getCursorScreenPoint();
+    const { x, y } = remote.screen.getCursorScreenPoint();
     const dx = this._mouseX - x;
     const dy = this._mouseY - y;
     Stage.x -= dx;
@@ -44,7 +44,7 @@ export default class Canvas extends React.Component {
   onMouseDown = (event) => {
     if (this.props.currentMap === -1) return;
     if (event.button === 1 || event.button === 2) {
-      const { x, y } = screen.getCursorScreenPoint();
+      const { x, y } = remote.screen.getCursorScreenPoint();
       this._mouseX = x;
       this._mouseY = y;
       this._isDragging = true;
