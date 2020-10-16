@@ -7,6 +7,7 @@ class Store extends Actions {
   @observable theme = '';
   @observable isLoaded = false;
   @observable projectPath = ipcRenderer.sendSync('getProp', 'projectPath');
+  @observable recentProjectPaths = ipcRenderer.sendSync('getProp', 'recentProjectPaths');
   @observable mapList = [];
   @observable qMap = [];
   @observable currentMap = -1;

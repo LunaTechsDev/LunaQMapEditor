@@ -48,7 +48,13 @@ export default (C) => {
     load(fileNames) {
       if (!fileNames) return;
       const projectPath = path.dirname(fileNames[0]);
+      const recentProjectPaths = this.getUserData('recentProjectPaths');
+      if (recentProjectPaths) {
+        recentProjectPaths.push(projectPath);
+      }
       this.setUserData('projectPath', projectPath);
+      this.setUserData('recentProjectPaths', recentProjectPaths || [projectPath]);
+
       const file1Path = path.join(projectPath, './data/MapInfos.json');
       const file2Path = path.join(projectPath, './data/QMap.json');
       this.isLoaded = true;
