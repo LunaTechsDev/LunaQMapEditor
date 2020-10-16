@@ -4,6 +4,3 @@ node_modules/
 # Builds
 releases/
 dist/
-
-# Other
-.vscode/
