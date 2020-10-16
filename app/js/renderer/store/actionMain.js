@@ -50,7 +50,9 @@ export default (C) => {
       const projectPath = path.dirname(fileNames[0]);
       const recentProjectPaths = this.getUserData('recentProjectPaths');
       if (recentProjectPaths) {
-        recentProjectPaths.push(projectPath);
+        if (!recentProjectPaths.some(p => p === projectPath)) {
+          recentProjectPaths.push(projectPath);
+        }
       }
       this.setUserData('projectPath', projectPath);
       this.setUserData('recentProjectPaths', recentProjectPaths || [projectPath]);
