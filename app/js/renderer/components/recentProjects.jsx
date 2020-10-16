@@ -5,12 +5,16 @@ import { observer } from "mobx-react";
 @observer
 export default class RecentProject extends React.Component {
   render() {
-    const { isLoaded } = this.props;
+    const { isLoaded, clickHandler } = this.props;
+    const paths = Store.getUserData("recentProjectPaths");
+    const items = paths.map((path) => (
+      <li>
+        <button onClick={this.clickHandler}>{path}</button>
+      </li>
+    ));
+
     return (
-      <div>
-        <b>Recent Projects</b>
-        {!isLoaded && <p>C:/Documents/Projects/MyProject</p>}
-      </div>
+    <div>{!isLoaded && <ul>{items}</ul>}</div>
     );
   }
 }
