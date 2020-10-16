@@ -42,7 +42,8 @@
   },
   "build": {
     "directories": {
-      "app": "dist"
+      "app": "dist",
+      "output": "releases"
     },
     "win": {
       "target": "nsis",
