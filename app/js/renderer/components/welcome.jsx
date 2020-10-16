@@ -12,7 +12,7 @@ export default class Welcome extends React.Component {
 
   render() {
     return (
-      <div style={{ margin: 4 + "rem" }}>
+      <div className="welcome">
         <h1>Welcome</h1>
         <h3>Open a project to get started.</h3>
         <RecentProjects clickHandler={this.openRecentProject} />
