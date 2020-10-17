@@ -1,0 +1,39 @@
+name: Build/release
+
+on:
+  push:
+   branches:
+     - master
+
+jobs:
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.19
+      - run: npm ci
+      - run: npm run compile
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: |
+            releases/LunaQMapEditor-Setup-win10-x64
+            releases/win-unpacked
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            releases/LunaQMapEditor-Setup-win10-x64
+            releases/win-unpacked
