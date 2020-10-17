@@ -33,7 +33,9 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
+          automatic_release_tag: "nightly"
+          title: "Nightly Build"
+          prerelease: true
           files: |
             releases/LunaQMapEditor-Setup-win10-x64
             releases/win-unpacked
