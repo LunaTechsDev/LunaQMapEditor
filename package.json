@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "electron ./dist/ --dev",
-    "compile": "rollup -c & build --x64 --ia32 -p always",
+    "compile": "rollup -c & build --x64",
     "build": "rollup -c"
   },
   "dependencies": {
@@ -51,7 +51,8 @@
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "LunaQMapEditor-Setup-win10-x64.${ext}"
     }
   }
 }
