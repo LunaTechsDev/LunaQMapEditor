@@ -11,7 +11,7 @@
   },
   "scripts": {
     "start": "electron ./dist/ --dev",
-    "compile": "rollup -c & build --x64",
+    "compile": "rollup -c & electron-builder build --x64",
     "build": "rollup -c"
   },
   "dependencies": {
