@@ -37,5 +37,4 @@ jobs:
           title: "Nightly Build"
           prerelease: true
           files: |
-            releases/LunaQMapEditor-Setup-win10-x64
-            releases/win-unpacked
+            releases/LunaQMapEditor-Setup-win10-x64.exe
