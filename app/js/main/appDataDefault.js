@@ -1,4 +1,6 @@
 export default {
   "main-width": 1600,
-  "main-height": 900
+  "main-height": 900,
+  "recentProjectsList": [],
+  "projectPath": ""
 }
