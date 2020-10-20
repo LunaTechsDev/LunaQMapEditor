@@ -93,8 +93,22 @@ export default (C) => {
           this.qMap = Array(this.mapList.length).fill([]);
         }
         this.projectPath = projectPath;
+        this.preloadTilesets()
         this.selectMap(-1);
         this.checkForQSprite();
+      }
+    }
+
+    preloadTilesets() {
+      const loader = PIXI.Loader.shared;
+      const tilesetDir = `${this.projectPath}/img/tilesets`;
+      const filenames = fs.readdirSync(`${this.projectPath}/img/tilesets`);
+      if (filenames.length > 0) {
+        filenames.forEach(filename => {
+          if (filename.includes('.png')) { 
+            loader.add(filename.replace('.png'), `${tilesetDir}/${filename}`);
+          }
+        })
       }
     }
 
