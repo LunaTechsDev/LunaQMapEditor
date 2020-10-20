@@ -1,6 +1,7 @@
 import Store from './../store'
 import { observe } from 'mobx'
 import Sprite from './sprite'
+import * as PIXI from 'pixi.js'
 
 const TILE_COLOR = 0xFFFFFF;
 const TILE_OUTLINE = 0xE0E0E0;

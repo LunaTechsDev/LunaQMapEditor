@@ -4,6 +4,7 @@ import { action } from 'mobx'
 import fs from 'fs'
 import path from 'path'
 
+import * as PIXI from 'pixi.js';
 import themes from './../style/themes'
 import { themeElements } from './../style'
 
@@ -20,13 +21,15 @@ export default (C) => {
       }
       let winSize = [window.innerWidth, window.innerHeight];
       winSize[1] -= MENUBAR_HEIGHT;
-      this.renderer = new PIXI.WebGLRenderer(winSize[0], winSize[1], {
+      this.renderer = new PIXI.Renderer({
+        width: winSize[0],
+        height: winSize[1],
         view: canvas,
         transparent: true,
         roundPixels: true,
         antialias: false
       })
-      this.ticker = new PIXI.ticker.Ticker();
+      this.ticker = new PIXI.Ticker()
       this.ticker.start();
     }
 
