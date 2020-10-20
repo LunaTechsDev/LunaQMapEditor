@@ -1,5 +1,6 @@
 import Store from './../store'
 import { observe } from 'mobx'
+import * as PIXI from 'pixi.js'
 
 import fs from 'fs'
 import path from 'path'
@@ -379,7 +380,7 @@ export default class Sprite extends PIXI.Sprite {
       filePath = path.join(Store.projectPath, filePath);
       const fileName = encodeURIComponent(path.basename(filePath));
       filePath = path.join(path.dirname(filePath), fileName);
-      const texture = PIXI.BaseTexture.fromImage(filePath);
+      const texture = PIXI.BaseTexture.from(filePath);
       texture.on('error', () => {
         this.texture = PIXI.Texture.EMPTY;
         Store.notify('ERROR', 'Failed to load image.');

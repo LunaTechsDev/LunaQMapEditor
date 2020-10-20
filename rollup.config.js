@@ -35,6 +35,7 @@ const options = {
       ],
       presets: ["@babel/preset-env", "@babel/preset-react"]
     }),
+    commonjs(),
     resolve(),
     copy({
       targets: [
