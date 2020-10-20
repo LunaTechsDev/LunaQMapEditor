@@ -26,9 +26,9 @@ export default (C) => {
         height: winSize[1],
         view: canvas,
         transparent: true,
-        roundPixels: true,
         antialias: false
       })
+      PIXI.settings.ROUND_PIXELS = true;
       this.ticker = new PIXI.Ticker()
       this.ticker.start();
     }
