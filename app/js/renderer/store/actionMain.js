@@ -77,6 +77,9 @@ export default (C) => {
       }
       if (this.isLoaded) {
         try {
+          this.tilesetsData = JSON.parse(
+            fs.readFileSync(path.join(projectPath, './data/Tilesets.json'), 'utf8')
+          )
           this.qMap = Array(this.mapList.length).fill([]);
           const dataPath = path.join(projectPath, "./data");
           this.parseQMap(
@@ -106,7 +109,7 @@ export default (C) => {
       if (filenames.length > 0) {
         filenames.forEach(filename => {
           if (filename.includes('.png')) { 
-            loader.add(filename.replace('.png'), `${tilesetDir}/${filename}`);
+            loader.add(filename.replace('.png', ''), `${tilesetDir}/${filename}`);
           }
         })
       }
