@@ -36,4 +36,3 @@ jobs:
           prerelease: false
           files: |
             releases/LunaQMapEditor-Setup-win10-x64
-            releases/win-unpacked
