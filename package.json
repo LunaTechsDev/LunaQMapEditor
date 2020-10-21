@@ -44,7 +44,7 @@
     "rollup-plugin-copy": "^3.3.0"
   },
   "build": {
-    "artifactName": "Luna_${productName}-${os}-${arch}.${ext}",
+    "artifactName": "Luna_${productName}-${os}.${ext}",
     "directories": {
       "app": "dist",
       "output": "releases"
@@ -64,7 +64,7 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "Luna_${productName}-${os}-${arch}-setup.${ext}"
+      "artifactName": "Luna_${productName}-${os}-setup.${ext}"
     }
   }
 }
