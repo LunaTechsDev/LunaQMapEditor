@@ -103,6 +103,7 @@ export default (C) => {
     }
 
     preloadTilesets() {
+      if (Store.currentMap > -1) { return }
       const loader = PIXI.Loader.shared;
       const tilesetDir = `${this.projectPath}/img/tilesets`;
       const filenames = fs.readdirSync(`${this.projectPath}/img/tilesets`);
