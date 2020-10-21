@@ -2,6 +2,7 @@ import Store from "./../store";
 import { observe } from "mobx";
 import Sprite from "./sprite";
 import * as PIXI from "pixi.js";
+import { ShaderTilemap } from "./Tilemap";
 
 const TILE_COLOR = 0xffffff;
 const TILE_OUTLINE = 0xe0e0e0;
@@ -22,6 +23,11 @@ class Stage extends PIXI.Container {
   create() {
     this._mapBG = new PIXI.Graphics();
     this.addChild(this._mapBG);
+    this._tilemap = new ShaderTilemap(
+      this._mapWidth * 48,
+      this._mapHeight * 48
+    );
+    this.addChild(this._tilemap);
     this._objContainer = new PIXI.Container();
     this.addChild(this._objContainer);
     this._mapGrid = new PIXI.Graphics();
@@ -30,6 +36,7 @@ class Stage extends PIXI.Container {
     this._mapEvents = new PIXI.Container();
     this.addChild(this._mapEvents);
   }
+  s;
   addListeners() {
     observe(Store, "currentMap", this.onCurrentMapChange);
   }
@@ -45,6 +52,7 @@ class Stage extends PIXI.Container {
       this.setSize(Store.mapData.width, Store.mapData.height);
       this.setObjects(Store.mapObjects);
       this.drawMapBG();
+      this.drawMapTiles();
       this.drawMapEvents(Store.mapData.events);
       this._observing = observe(
         Store.mapObjects,
@@ -91,6 +99,51 @@ class Stage extends PIXI.Container {
       this._mapGrid.moveTo(0, y * this._gridHeight);
       this._mapGrid.lineTo(fullMapWidth, y * this._gridHeight);
     }
+  }
+  resize() {
+    const tilemap = this._tilemap;
+    if (!tilemap) return;
+    const width = this._mapWidth * 48;
+    const height = this._mapHeight * 48;
+    tilemap.width = (width + 2 * tilemap._margin) * 1;
+    tilemap.height = (height + 2 * tilemap._margin) * 1;
+    this.scale.x = 1.0 / 1;
+    this.scale.y = 1.0 / 1;
+    this.filterArea = new PIXI.Rectangle(0, 0, width * 1, height * 1);
+  }
+  drawMapTiles() {
+    PIXI.Loader.shared.load((loader, resources) => {
+      // Get tileset info and tile data
+
+      const tilesetId = Store.mapData.tilesetId;
+      const tileset = Store.tilesetsData[tilesetId];
+      const tilesetNames = tileset.tilesetNames;
+
+      const width = this._mapWidth * 48;
+      const height = this._mapHeight * 48;
+
+      const tilemap = this._tilemap;
+      while (tilemap.bitmaps.length > 0) {
+        tilemap.bitmaps.pop();
+      }
+
+      for (var i = 0; i < tilesetNames.length; i++) {
+        var texture =
+          resources[tilesetNames[i]] && resources[tilesetNames[i]].texture;
+        tilemap.bitmaps.push(texture);
+        if (texture) {
+          texture.baseTexture.mipmap = true;
+        }
+        if (i === tilesetNames.length - 1) {
+          tilemap._updateBitmaps(); // Force update to bitmaps
+        }
+      }
+
+      tilemap.flags = tileset.flags;
+      tilemap.setData(this._mapWidth, this._mapHeight, Store.mapData.data);
+      tilemap.refresh();
+      this.resize();
+    });
   }
   drawMapEvents(events) {
     this._mapEvents.removeChildren();
@@ -196,6 +249,7 @@ class Stage extends PIXI.Container {
     for (let i = 0; i < mapObjs.length; i++) {
       mapObjs[i].update();
     }
+    this._tilemap.update();
   }
 }
 
