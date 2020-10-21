@@ -90,6 +90,7 @@ export default class Sprite extends PIXI.Sprite {
     this._isHidden = obj.__hidden;
     this._isLocked = obj.__locked;
     this._isSelected = false;
+    this._isTouching = false;
     this._qSprite = null;
     if (this._isHidden) this.visible = false;
     if (obj.isQSprite) {
@@ -107,6 +108,11 @@ export default class Sprite extends PIXI.Sprite {
     this.loadImage(obj.filePath);
     this.addListeners();
   }
+
+  isTouching() {
+    return this._isTouching;
+  }
+
   addListeners() {
     this.buttonMode = true;
     this.interactive = !this._isLocked && !this._isHidden;
@@ -194,12 +200,14 @@ export default class Sprite extends PIXI.Sprite {
     if (!this._isSelected) {
       this._dataGraphic.alpha = 0.8;
     }
+    this._isTouching = true;
   }
   onOut(event) {
     if (this._isLocked || this._isHidden) return;
     if (!this._isSelected) {
       this._dataGraphic.alpha = 0;
     }
+    this._isTouching = false;
   }
   onObjectChange(change) {
     const { name, newValue, object } = change;
