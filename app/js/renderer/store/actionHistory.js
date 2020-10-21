@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionHistory extends C {
@@ -21,7 +21,6 @@ export default (C) => {
     undoHistory(action) {
       const lastAction = this._history.pop();
       if (!lastAction) return;
-
     }
-  }
-}
+  };
+};

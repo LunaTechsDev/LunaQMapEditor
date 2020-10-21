@@ -1,5 +1,5 @@
-import React from 'react'
-import Store from './../store'
+import React from "react";
+import Store from "./../store";
 
 const ITEM_SHIFT = 10;
 
@@ -9,25 +9,26 @@ export default class ToolbarMapList extends React.Component {
     this.props.mapList.forEach((map, index) => {
       if (map) {
         const isSelected = map.id === this.props.currentMap;
-        const clss = 'item' + (isSelected ? ' selected' : '');
+        const clss = "item" + (isSelected ? " selected" : "");
         const style = {
           paddingLeft: 5 + this.calcLeft(map.id),
-          paddingRight: 5
-        }
+          paddingRight: 5,
+        };
         const onClick2 = () => {
           this.onClick(map.id);
-        }
+        };
         list[map.order] = (
           <li
             key={`map-${index}`}
             className={clss}
             style={style}
-            onClick={onClick2}>
+            onClick={onClick2}
+          >
             {map.name}
           </li>
-        )
+        );
       }
-    })
+    });
     return list;
   }
   calcLeft(id) {
@@ -50,10 +51,8 @@ export default class ToolbarMapList extends React.Component {
     return (
       <div className="toolbar map">
         <div className="header">Map List</div>
-        <ul>
-          { this.createList() }
-        </ul>
+        <ul>{this.createList()}</ul>
       </div>
-    )
+    );
   }
 }

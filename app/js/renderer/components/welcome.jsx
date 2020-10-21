@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 
-import RecentProjects from './recentProjects.jsx'
+import RecentProjects from "./recentProjects.jsx";
 
 @observer
 export default class Welcome extends React.Component {

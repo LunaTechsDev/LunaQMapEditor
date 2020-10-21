@@ -1,13 +1,15 @@
-import Actions from './actions'
+import Actions from "./actions";
 
-import { observable, computed } from 'mobx'
-import { ipcRenderer } from 'electron'
+import { observable, computed } from "mobx";
+import { ipcRenderer } from "electron";
 
 class Store extends Actions {
-  @observable theme = '';
+  @observable theme = "";
   @observable isLoaded = false;
-  @observable projectPath = ipcRenderer.sendSync('getProp', 'projectPath') || "";
-  @observable recentProjectPaths = ipcRenderer.sendSync('getProp', 'recentProjectPaths') || [];
+  @observable projectPath =
+    ipcRenderer.sendSync("getProp", "projectPath") || "";
+  @observable recentProjectPaths =
+    ipcRenderer.sendSync("getProp", "recentProjectPaths") || [];
   @observable mapList = [];
   @observable qMap = [];
   @observable currentMap = -1;
@@ -16,11 +18,12 @@ class Store extends Actions {
   @observable gridHeight = 48;
   @observable context = {
     open: false,
-    type: '',
+    type: "",
     selected: -1,
-    x: 0, y: 0,
-    items: []
-  }
+    x: 0,
+    y: 0,
+    items: [],
+  };
   @observable notifications = [];
   hasQSprite = false;
 
@@ -38,14 +41,14 @@ class Store extends Actions {
   }
 
   getUserData(prop) {
-    return ipcRenderer.sendSync('getProp', prop);
+    return ipcRenderer.sendSync("getProp", prop);
   }
 
   setUserData(prop, value) {
-    ipcRenderer.send('setProp', prop, value);
+    ipcRenderer.send("setProp", prop, value);
   }
 }
 
-let store = window.Store = new Store();
+let store = (window.Store = new Store());
 
 export default store;

@@ -1,31 +1,33 @@
-import React from 'react'
-import Store from '../store/index'
-import Stage from '../display/stage'
+import React from "react";
+import Store from "../store/index";
+import Stage from "../display/stage";
 
-import { ipcRenderer, remote } from 'electron'
-import fs from 'fs'
-import path from 'path'
+import { ipcRenderer, remote } from "electron";
+import fs from "fs";
+import path from "path";
 
 export default class Menubar extends React.Component {
   componentWillMount() {
-    ipcRenderer.on('focus', this.onFocus);
+    ipcRenderer.on("focus", this.onFocus);
   }
   openLoad = () => {
     const files = remote.dialog.showOpenDialogSync({
-      title: 'Open Project',
+      title: "Open Project",
       defaultPath: this.props.projectPath,
-      filters: [{
-        name: 'RPG Maker MV Project',
-        extensions: ['rpgproject', 'rmmzproject']
-      }]
-    })
+      filters: [
+        {
+          name: "RPG Maker MV Project",
+          extensions: ["rpgproject", "rmmzproject"],
+        },
+      ],
+    });
     Store.load(files);
-  }
+  };
   startWatch(file, projectFile) {
     fs.stat(file, (err, stats) => {
       if (!err) {
         if (this._watching) {
-          fs.unwatchFile(this._watching[0])
+          fs.unwatchFile(this._watching[0]);
         }
         this._watching = [file, projectFile, JSON.stringify(stats.mtime)];
         fs.watchFile(file, (current, prev) => {
@@ -33,21 +35,21 @@ export default class Menubar extends React.Component {
           const { currentMap } = this.props;
           Store.load([this._watching[1]]);
           Store.selectMap(currentMap);
-        })
+        });
       }
     });
   }
   openHelp = () => {
-    ipcRenderer.send('openHelp');
-  }
+    ipcRenderer.send("openHelp");
+  };
   changeTheme = () => {
     let theme = Store.theme;
-    if (theme === 'styleLight') {
-      Store.changeTheme('styleDark');
+    if (theme === "styleLight") {
+      Store.changeTheme("styleDark");
     } else {
-      Store.changeTheme('styleLight');
+      Store.changeTheme("styleLight");
     }
-  }
+  };
   onFocus = () => {
     if (this.props.isLoaded && this._watching) {
       const mtime = JSON.stringify(fs.statSync(this._watching[0]).mtime);
@@ -58,13 +60,15 @@ export default class Menubar extends React.Component {
         Store.selectMap(currentMap);
       }
     }
-  }
+  };
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isLoaded !== this.props.isLoaded ||
-      nextProps.projectPath !== this.props.projectPath) {
+    if (
+      nextProps.isLoaded !== this.props.isLoaded ||
+      nextProps.projectPath !== this.props.projectPath
+    ) {
       if (nextProps.isLoaded) {
-        const mapInfos = path.join(nextProps.projectPath, 'data/MapInfos.json');
-        const project = path.join(nextProps.projectPath, 'Game.rpgproject');
+        const mapInfos = path.join(nextProps.projectPath, "data/MapInfos.json");
+        const project = path.join(nextProps.projectPath, "Game.rpgproject");
         this.startWatch(mapInfos, project);
       } else if (this._watching) {
         fs.unwatchFile(this._watching[0]);
@@ -72,37 +76,22 @@ export default class Menubar extends React.Component {
     }
   }
   render() {
-    const {
-      theme,
-      isLoaded
-    } = this.props;
-    let nextTheme = theme === 'light' ? 'Dark' : 'Light';
+    const { theme, isLoaded } = this.props;
+    let nextTheme = theme === "light" ? "Dark" : "Light";
     return (
       <div className="menubar">
         <div className="left">
-          <button onClick={this.openLoad}>
-            Load
-          </button>
-          {isLoaded &&
-            <button onClick={Store.save.bind(Stage)}>
-              Save
-            </button>
-          }
-          {isLoaded &&
-            <button onClick={Stage.screenShot.bind(Stage)}>
-              Screenshot
-            </button>
-          }
+          <button onClick={this.openLoad}>Load</button>
+          {isLoaded && <button onClick={Store.save.bind(Stage)}>Save</button>}
+          {isLoaded && (
+            <button onClick={Stage.screenShot.bind(Stage)}>Screenshot</button>
+          )}
         </div>
         <div className="right">
-          <button onClick={this.changeTheme}>
-            {nextTheme}
-          </button>
-          <button onClick={this.openHelp}>
-            Help
-          </button>
+          <button onClick={this.changeTheme}>{nextTheme}</button>
+          <button onClick={this.openHelp}>Help</button>
         </div>
       </div>
-    )
+    );
   }
 }

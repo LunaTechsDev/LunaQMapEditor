@@ -3,32 +3,33 @@
 @import (less, reference) "font-awesome/css/font-awesome.min.css";
 
 html {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 body {
-	width: 100%;
-	height: 100%;
-	font-family: 'Roboto', sans-serif;
-	font-size: 14px;
-	color: @text-primary;
-	background-color: @bg-primary;
-	padding: 0;
-	margin: 0;
-	-webkit-user-select: none;
-	cursor: default;
-	overflow: hidden;
+  width: 100%;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: @text-primary;
+  background-color: @bg-primary;
+  padding: 0;
+  margin: 0;
+  -webkit-user-select: none;
+  cursor: default;
+  overflow: hidden;
 }
 ::-webkit-scrollbar {
   width: 12px;
-	height: 12px;
+  height: 12px;
 }
-::-webkit-scrollbar-track {}
+::-webkit-scrollbar-track {
+}
 ::-webkit-scrollbar-thumb {
   background: @highlight;
 }
 a {
-	color: @highlight;
+  color: @highlight;
 }
 
 .welcome {
@@ -46,357 +47,365 @@ a {
   margin: 0.5rem;
 }
 .menubar {
-	z-index: 2;
-	background-color: @border;
-	border-bottom: 2px solid @border;
-	height: 32px !important;
-	line-height: 32px !important;
-	i {
-		padding-right: 5px;
-	}
+  z-index: 2;
+  background-color: @border;
+  border-bottom: 2px solid @border;
+  height: 32px !important;
+  line-height: 32px !important;
+  i {
+    padding-right: 5px;
+  }
 }
 .toolbar {
-	z-index: 1;
-	background-color: @bg-secondary;
-	border-right: 2px solid @border;
-	width: 175px;
-	height: ~"calc(100% - 34px)";
-	box-sizing: border-box;
-	padding: 5px;
-	position: absolute;
-	transition: left 200ms;
-	&.map {
-		z-index: 2;
-		ul {
-			height: ~"calc(100% - 30px)";
-		}
-	}
-	&.properties {
-		overflow-y: auto;
-		border-left: 2px solid @border;
-		border-right: none;
-		transition: right 200ms;
-		width: 225px;
-		.propsContainer {
-			overflow: hidden;
-			position: relative;
-			.props {
-				display: flex;
-				flex-wrap: wrap;
-				padding: 0 5px;
-				.full {
-					box-sizing: border-box;
-					width: 100%;
-					padding: 5px;
-				}
-				.half {
-					box-sizing: border-box;
-					width: 50%;
-					padding: 5px;
-				}
-				.third {
-					box-sizing: border-box;
-					width: 33%;
-					padding: 5px;
-				}
-				.conditions {
-					overflow-y: auto;
-					max-height: 125px;
-					box-sizing: border-box;
-					.condition {
-						display: flex;
-						flex-wrap: wrap;
-						cursor: pointer;
-						&:hover {
-							background-color: @highlight !important;
-						}
-						.col1 {
-							width: ~"calc(100% - 60% - 15px)";
-						}
-						.col2 {
-							width: ~"calc(100% - 40% - 15px)";
-							height: 17px;
-							overflow: hidden;
-						}
-						.col3 {
-							&:extend(.fa, .fa-minus all);
-							width: 15px;
-							&:hover {
-								color: @disabled;
-							}
-						}
-					}
-				}
-				input[type=text], textarea {
-					width: 100%;
-					border: 1px solid @border;
-					border-radius: 3px;
-					padding: 3px;
-					box-sizing: border-box;
-					color: fade(@text-secondary, 50%);
-					transition: all 200ms linear;
-					&:hover {
-						border-color: @highlight;
-						color: @text-secondary !important;
-					}
-					&:focus {
-						color: @text-secondary !important;
-						border-color: @highlight;
-						outline: none;
-						box-shadow: inset 0 0 2px @highlight;
-					}
-				}
-				textarea {
-					white-space: nowrap;
-					height: 125px;
-					resize: vertical;
-				}
-				button {
-					margin: 0;
-				}
-			}
-		}
-	}
-	.header {
-		font-weight: bold;
-		height: 30px;
-		line-height: 30px;
-	}
-	.footer {
-		height: 50px;
-		line-height: 50px;
-	}
-	ul {
-		height: ~"calc(100% - 30px - 50px + 10px)";
-		list-style-type: none;
-		margin: 0;
-		padding: 0;
-		overflow-y: auto;
-		overflow-x: hidden;
-		li {
-			padding: 3px 3px 3px 10px;
-			overflow: hidden;
-			a {
-				color: inherit;
-				display: block;
-				width: ~"calc(100% - 58px)";
-				height: 17px;
-				float: left;
-				overflow: hidden;
-			}
-			.handle {
-				&:extend(.fa, .fa-square-o all);
-				padding-right: 5px;
-				float: left;
-				width: 15px;
-			}
-			.locked {
-				&:extend(.fa, .fa-lock all);
-				padding-left: 5px;
-				float: right;
-				width: 15px;
-			}
-			.unlocked {
-				&:extend(.fa, .fa-unlock all);
-				padding-left: 5px;
-				float: right;
-				width: 15px;
-			}
-			.visible {
-				&:extend(.fa, .fa-eye all);
-				float: right;
-				width: 15px;
-			}
-			.hidden {
-				&:extend(.fa, .fa-eye-slash all);
-				float: right;
-				width: 15px;
-			}
-			&:hover {
-				cursor: pointer;
-				background-color: @highlight !important;
-			}
-			&.selected {
-				background-color: @border;
-				.handle {
-					&:extend(.fa, .fa-square all);
-				}
-			}
-			&.contextSelected {
-				background-color: lighten(@highlight, 20%);
-			}
-		}
-	}
+  z-index: 1;
+  background-color: @bg-secondary;
+  border-right: 2px solid @border;
+  width: 175px;
+  height: ~"calc(100% - 34px)";
+  box-sizing: border-box;
+  padding: 5px;
+  position: absolute;
+  transition: left 200ms;
+  &.map {
+    z-index: 2;
+    ul {
+      height: ~"calc(100% - 30px)";
+    }
+  }
+  &.properties {
+    overflow-y: auto;
+    border-left: 2px solid @border;
+    border-right: none;
+    transition: right 200ms;
+    width: 225px;
+    .propsContainer {
+      overflow: hidden;
+      position: relative;
+      .props {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 5px;
+        .full {
+          box-sizing: border-box;
+          width: 100%;
+          padding: 5px;
+        }
+        .half {
+          box-sizing: border-box;
+          width: 50%;
+          padding: 5px;
+        }
+        .third {
+          box-sizing: border-box;
+          width: 33%;
+          padding: 5px;
+        }
+        .conditions {
+          overflow-y: auto;
+          max-height: 125px;
+          box-sizing: border-box;
+          .condition {
+            display: flex;
+            flex-wrap: wrap;
+            cursor: pointer;
+            &:hover {
+              background-color: @highlight !important;
+            }
+            .col1 {
+              width: ~"calc(100% - 60% - 15px)";
+            }
+            .col2 {
+              width: ~"calc(100% - 40% - 15px)";
+              height: 17px;
+              overflow: hidden;
+            }
+            .col3 {
+              &:extend(.fa,
+              .fa-minus all);
+              width: 15px;
+              &:hover {
+                color: @disabled;
+              }
+            }
+          }
+        }
+        input[type="text"],
+        textarea {
+          width: 100%;
+          border: 1px solid @border;
+          border-radius: 3px;
+          padding: 3px;
+          box-sizing: border-box;
+          color: fade(@text-secondary, 50%);
+          transition: all 200ms linear;
+          &:hover {
+            border-color: @highlight;
+            color: @text-secondary !important;
+          }
+          &:focus {
+            color: @text-secondary !important;
+            border-color: @highlight;
+            outline: none;
+            box-shadow: inset 0 0 2px @highlight;
+          }
+        }
+        textarea {
+          white-space: nowrap;
+          height: 125px;
+          resize: vertical;
+        }
+        button {
+          margin: 0;
+        }
+      }
+    }
+  }
+  .header {
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+  }
+  .footer {
+    height: 50px;
+    line-height: 50px;
+  }
+  ul {
+    height: ~"calc(100% - 30px - 50px + 10px)";
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    li {
+      padding: 3px 3px 3px 10px;
+      overflow: hidden;
+      a {
+        color: inherit;
+        display: block;
+        width: ~"calc(100% - 58px)";
+        height: 17px;
+        float: left;
+        overflow: hidden;
+      }
+      .handle {
+        &:extend(.fa,
+        .fa-square-o all);
+        padding-right: 5px;
+        float: left;
+        width: 15px;
+      }
+      .locked {
+        &:extend(.fa,
+        .fa-lock all);
+        padding-left: 5px;
+        float: right;
+        width: 15px;
+      }
+      .unlocked {
+        &:extend(.fa,
+        .fa-unlock all);
+        padding-left: 5px;
+        float: right;
+        width: 15px;
+      }
+      .visible {
+        &:extend(.fa,
+        .fa-eye all);
+        float: right;
+        width: 15px;
+      }
+      .hidden {
+        &:extend(.fa,
+        .fa-eye-slash all);
+        float: right;
+        width: 15px;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: @highlight !important;
+      }
+      &.selected {
+        background-color: @border;
+        .handle {
+          &:extend(.fa,
+          .fa-square all);
+        }
+      }
+      &.contextSelected {
+        background-color: lighten(@highlight, 20%);
+      }
+    }
+  }
 }
 .sortHelperList {
-	z-index: 2;
-	padding: 5px 15px;
-	list-style-type: none;
-	background-color: lighten(@highlight, 20%);
-	.handle {
-		&:extend(.fa, .fa-square all);
-		padding-right: 5px;
-	}
+  z-index: 2;
+  padding: 5px 15px;
+  list-style-type: none;
+  background-color: lighten(@highlight, 20%);
+  .handle {
+    &:extend(.fa,
+    .fa-square all);
+    padding-right: 5px;
+  }
 }
 .contextMenu {
-	position: absolute;
-	background-color: @bg-secondary;
-	border: 1px solid @border;
-	padding: 5px 0;
-	z-index: 11;
-	.item {
-		padding: 2px 5px;
-		cursor: pointer;
-		&:hover {
-			background-color: @border;
-		}
-	}
+  position: absolute;
+  background-color: @bg-secondary;
+  border: 1px solid @border;
+  padding: 5px 0;
+  z-index: 11;
+  .item {
+    padding: 2px 5px;
+    cursor: pointer;
+    &:hover {
+      background-color: @border;
+    }
+  }
 }
 .veil {
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 10;
-	width: 100%;
-	height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
 }
 button {
-	color: @text-primary;
-	cursor: pointer;
-	height: 24px;
-	min-width: 60px;
-	margin: 0 5px;
-	outline: none;
-	background-color: inherit;
-	border: 2px solid @border;
-	border-radius: 3px;
-	transition: all 150ms linear;
-	&:hover {
-		border-color: @highlight;
-		color: @highlight;
-	}
-	&.disabled {
-		cursor: not-allowed;
-		&:hover {
-			border-color: @disabled;
-			color: @disabled;
-		}
-	}
-	i {
-		padding-right: 5px;
-	}
+  color: @text-primary;
+  cursor: pointer;
+  height: 24px;
+  min-width: 60px;
+  margin: 0 5px;
+  outline: none;
+  background-color: inherit;
+  border: 2px solid @border;
+  border-radius: 3px;
+  transition: all 150ms linear;
+  &:hover {
+    border-color: @highlight;
+    color: @highlight;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    &:hover {
+      border-color: @disabled;
+      color: @disabled;
+    }
+  }
+  i {
+    padding-right: 5px;
+  }
 }
 .pixi {
-	outline: none;
-	z-index: 0;
-	background-color: @bg-primary;
-	position: absolute;
-	top: 34px;
+  outline: none;
+  z-index: 0;
+  background-color: @bg-primary;
+  position: absolute;
+  top: 34px;
 }
 .notifications {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	z-index: 10;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	li {
-		background-color: @bg-secondary;
-		pointer-events: all;
-		border-radius: 3px;
-		padding: 5px;
-		margin: 5px;
-		cursor: pointer;
-		white-space: pre-line;
-		width: auto;
-		max-width: ~"calc(100% - 10px)";
-		float: right;
-		clear: right;
-	}
-	.error {
-		background-color: @disabled;
-		&:hover {
-			background-color: lighten(@disabled, 20%);
-		}
-	}
-	.success {
-		background-color: @highlight;
-		&:hover {
-			background-color: lighten(@highlight, 20%);
-		}
-	}
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    background-color: @bg-secondary;
+    pointer-events: all;
+    border-radius: 3px;
+    padding: 5px;
+    margin: 5px;
+    cursor: pointer;
+    white-space: pre-line;
+    width: auto;
+    max-width: ~"calc(100% - 10px)";
+    float: right;
+    clear: right;
+  }
+  .error {
+    background-color: @disabled;
+    &:hover {
+      background-color: lighten(@disabled, 20%);
+    }
+  }
+  .success {
+    background-color: @highlight;
+    &:hover {
+      background-color: lighten(@highlight, 20%);
+    }
+  }
 }
 .left {
-	float: left;
+  float: left;
 }
 .right {
-	float: right;
+  float: right;
 }
 .secondary {
-	background-color: @bg-secondary;
+  background-color: @bg-secondary;
 }
 .frameSelect {
-	overflow: auto;
-	.index {
-		box-sizing: border-box;
-		border: 2px solid @border;
-		position: absolute;
-		z-index: 1;
-		transition: all 150ms;
-		cursor: pointer;
-		&.selected {
-			border: 2px solid lighten(@highlight, 20%);
-			z-index: 2;
-		}
-		&:hover {
-			border: 2px solid @highlight;
-			z-index: 2;
-		}
-	}
+  overflow: auto;
+  .index {
+    box-sizing: border-box;
+    border: 2px solid @border;
+    position: absolute;
+    z-index: 1;
+    transition: all 150ms;
+    cursor: pointer;
+    &.selected {
+      border: 2px solid lighten(@highlight, 20%);
+      z-index: 2;
+    }
+    &:hover {
+      border: 2px solid @highlight;
+      z-index: 2;
+    }
+  }
 }
 .conditionSelect {
-	overflow: hidden;
-	width: 100%;
-	.header {
-		padding: 5px;
-		width: ~"calc(100% - 10px)";
-		.type {
-			font-weight: bold;
-		}
-		select {
-			float: right;
-			width: 50%;
-		}
-	}
-	.body {
-		padding: 5px;
-		.value {
-			font-weight: bold;
-			margin-right: 5px;
-		}
-		.col0 {
-			padding: 0px;
-			box-sizing: border-box;
-			width: 100%;
-		}
-		.col1 {
-			padding: 0px;
-			box-sizing: border-box;
-			width: 60%;
-			margin-right: 5px;
-		}
-		.col2 {
-			padding: 0px;
-			box-sizing: border-box;
-			width: ~"calc(40% - 5px)";
-			vertical-align: top;
-		}
-	}
-
+  overflow: hidden;
+  width: 100%;
+  .header {
+    padding: 5px;
+    width: ~"calc(100% - 10px)";
+    .type {
+      font-weight: bold;
+    }
+    select {
+      float: right;
+      width: 50%;
+    }
+  }
+  .body {
+    padding: 5px;
+    .value {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .col0 {
+      padding: 0px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    .col1 {
+      padding: 0px;
+      box-sizing: border-box;
+      width: 60%;
+      margin-right: 5px;
+    }
+    .col2 {
+      padding: 0px;
+      box-sizing: border-box;
+      width: ~"calc(40% - 5px)";
+      vertical-align: top;
+    }
+  }
 }
 .fixedRight {
-	position: fixed;
-	right: 5px;
-	bottom: 5px;
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
 }

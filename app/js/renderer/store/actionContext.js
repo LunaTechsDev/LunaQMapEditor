@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionContext extends C {
@@ -6,11 +6,11 @@ export default (C) => {
     openContext(x, y, type, i) {
       let items = [];
       switch (type) {
-        case 'mapObj': {
+        case "mapObj": {
           items = [
-            { title: 'Duplicate', handler: this.duplicateMapObj.bind(this, i) },
-            { title: 'Delete', handler: this.deleteMapObj.bind(this, i) }
-          ]
+            { title: "Duplicate", handler: this.duplicateMapObj.bind(this, i) },
+            { title: "Delete", handler: this.deleteMapObj.bind(this, i) },
+          ];
           break;
         }
       }
@@ -19,9 +19,10 @@ export default (C) => {
         open: true,
         type,
         selected: i,
-        x, y,
-        items
-      }
+        x,
+        y,
+        items,
+      };
     }
 
     @action.bound
@@ -29,10 +30,10 @@ export default (C) => {
       this.context = {
         ...this.context,
         open: false,
-        type: '',
+        type: "",
         selected: -1,
-        items: []
-      }
+        items: [],
+      };
     }
-  }
-}
+  };
+};

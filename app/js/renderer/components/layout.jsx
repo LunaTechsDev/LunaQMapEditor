@@ -1,11 +1,11 @@
-import React from 'react'
-import { observer } from 'mobx-react'
+import React from "react";
+import { observer } from "mobx-react";
 
-import Menubar from './menubar.jsx'
-import Welcome from './welcome.jsx'
-import Toolbar from './toolbar.jsx'
-import Canvas from './canvas.jsx'
-import Notifications from './notifications.jsx'
+import Menubar from "./menubar.jsx";
+import Welcome from "./welcome.jsx";
+import Toolbar from "./toolbar.jsx";
+import Canvas from "./canvas.jsx";
+import Notifications from "./notifications.jsx";
 
 @observer
 export default class Layout extends React.Component {
@@ -13,10 +13,10 @@ export default class Layout extends React.Component {
     document.body.ondragover = document.body.ondrop = (e) => {
       e.preventDefault();
       return false;
-    }
+    };
     document.body.ondragleave = document.body.ondragend = () => {
       return false;
-    }
+    };
   }
   render() {
     const {
@@ -26,7 +26,7 @@ export default class Layout extends React.Component {
       currentMap,
       currentMapObj,
       mapList,
-      notifications
+      notifications,
     } = this.props.store;
     return (
       <div>
@@ -35,14 +35,14 @@ export default class Layout extends React.Component {
           isLoaded={isLoaded}
           projectPath={projectPath}
           currentMap={currentMap}
-          />
-        { isLoaded === false && <Welcome/> }
-        { isLoaded && <Toolbar store={this.props.store} /> }
-        { isLoaded &&
+        />
+        {isLoaded === false && <Welcome />}
+        {isLoaded && <Toolbar store={this.props.store} />}
+        {isLoaded && (
           <Canvas currentMap={currentMap} currentMapObj={currentMapObj} />
-          }
+        )}
         <Notifications notifications={notifications} />
       </div>
-    )
+    );
   }
 }

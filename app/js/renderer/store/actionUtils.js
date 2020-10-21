@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionUtils extends C {
@@ -17,7 +17,7 @@ export default (C) => {
       while (true) {
         let match = inlineRegex.exec(string);
         if (match) {
-          if (match[2] === '') {
+          if (match[2] === "") {
             meta[match[1]] = true;
           } else {
             meta[match[1]] = match[2];
@@ -55,6 +55,5 @@ export default (C) => {
       }
       return name;
     }
-
-  }
-}
+  };
+};
