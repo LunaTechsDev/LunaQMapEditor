@@ -11,9 +11,9 @@
   },
   "scripts": {
     "start": "electron ./dist/ --dev",
-    "compile": "rollup -c & electron-builder build --x64 -p never",
-    "compile:linux": "rollup -c & electron-builder build --linux -p never",
-    "compile:mac": "rollup -c & electron-builder build --mac -p never",
+    "compile": "electron-builder build --x64 -p never",
+    "compile:linux": "electron-builder build --linux -p never",
+    "compile:mac": "electron-builder build --mac -p never",
     "build": "rollup -c"
   },
   "dependencies": {
