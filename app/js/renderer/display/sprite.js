@@ -154,7 +154,6 @@ export default class Sprite extends PIXI.Sprite {
       const y = this._tempY + dy / scaleY;
       this.x = this.adjustXWithSnap(x, dx, scaleX);
       this.y = this.adjustYWithSnap(y, dy, scaleY);
-      console.log("drag:", this.y);
       this._tempX = x;
       this._tempY = y;
       this._prevPos = { ...newPos };

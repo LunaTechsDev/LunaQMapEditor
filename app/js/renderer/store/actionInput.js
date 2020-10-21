@@ -22,7 +22,6 @@ export default (C) => {
 
     isLongPressed(keyCode) {
       if (!this.isPressed(keyCode)) return false;
-      console.log(this._lastDown);
       const dt = Date.now() - this._keyState[keyCode];
       return this.isTriggered(keyCode) || dt > 300;
     }
