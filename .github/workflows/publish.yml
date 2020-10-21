@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: 12.19
       - run: npm ci
+      - run: npm run build
       - run: npm run compile
 
       - name: Upload Artifacts
@@ -40,6 +41,7 @@ jobs:
         with:
           node-version: 12.19
       - run: npm ci
+      - run: npm run build
       - run: npm run compile:linux
 
       - name: Upload Artifacts
@@ -60,6 +62,7 @@ jobs:
         with:
           node-version: 12.19
       - run: npm ci
+      - run: npm run build
       - run: npm run compile:mac
 
       - name: Upload Artifacts
@@ -72,6 +75,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/download-artifact@v2
+        with:
+          path: releases/
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
