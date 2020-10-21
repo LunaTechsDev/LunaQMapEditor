@@ -6,12 +6,8 @@ on:
       - v*
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [windows-latest]
+  build_on_win:
+    runs-on: windows-latest
 
     steps:
       - name: Check out Git repository
@@ -28,11 +24,60 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: |
-            releases/LunaQMapEditor-Setup-win10-x64
-            releases/win-unpacked
+            releases/Luna_QMapEditor-win.zip
+            releases/Luna_QMapEditor-win-setup.exe
+
+
+  build_on_linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.19
+      - run: npm ci
+      - run: npm run compile:linux
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: |
+            releases/Luna_QMapEditor-linux.zip
+
+  build_on_mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.19
+      - run: npm ci
+      - run: npm run compile:mac
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          path: |
+            releases/Luna_QMapEditor-mac.zip
+
+  upload_artifacts:
+    runs-on: ubuntu-latest
+
+    steps:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            releases/LunaQMapEditor-Setup-win10-x64
+            releases/Luna_QMapEditor-win.zip
+            releases/Luna_QMapEditor-win-setup.exe
+            releases/Luna_QMapEditor-linux.zip
+            releases/Luna_QMapEditor-mac.zip
