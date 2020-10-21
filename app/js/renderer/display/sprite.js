@@ -380,12 +380,12 @@ export default class Sprite extends PIXI.Sprite {
       filePath = path.join(Store.projectPath, filePath);
       const fileName = encodeURIComponent(path.basename(filePath));
       filePath = path.join(path.dirname(filePath), fileName);
-      const texture = PIXI.BaseTexture.from(filePath);
+      const texture = PIXI.BaseTexture.from(filePath)
       texture.on('error', () => {
         this.texture = PIXI.Texture.EMPTY;
         Store.notify('ERROR', 'Failed to load image.');
       })
-      if (texture.hasLoaded) {
+      if (texture.valid) {
         this.setSprite(texture);
         this.drawData();
         this.applyMeta();
