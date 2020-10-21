@@ -1,25 +1,20 @@
-import React from 'react'
-import Store from '../store'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react'
-import { remote, ipcRenderer } from 'electron'
-import path from 'path'
+import React from "react";
+import Store from "../store";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
+import { remote, ipcRenderer } from "electron";
+import path from "path";
 
-const EXTRAS = [
-  'On Player',
-  'Collider',
-  'Tone',
-  'Breath'
-]
+const EXTRAS = ["On Player", "Collider", "Tone", "Breath"];
 
 @observer
 export default class ToolbarProperties extends React.Component {
   componentWillMount() {
-    ipcRenderer.on('setFrameIndex', this.onSetIndex);
-    ipcRenderer.on('setCondition', this.onSetCondition);
+    ipcRenderer.on("setFrameIndex", this.onSetIndex);
+    ipcRenderer.on("setCondition", this.onSetCondition);
   }
   componentWillUnmount() {
-    ipcRenderer.removeListener('setCondition', this.onSetCondition);
+    ipcRenderer.removeListener("setCondition", this.onSetCondition);
   }
   updateProperty(key, value) {
     this.props.mapObject[key] = value;
@@ -31,27 +26,27 @@ export default class ToolbarProperties extends React.Component {
     const prop = e.target.name;
     let value = e.target.value;
     switch (prop) {
-      case 'cols':
-      case 'rows':
-      case 'x':
-      case 'y':
-      case 'z': {
+      case "cols":
+      case "rows":
+      case "x":
+      case "y":
+      case "z": {
         if (!/^-?[0-9]*$/.test(value)) {
           value = this.props.mapObject[prop];
         }
         break;
       }
-      case 'anchorX':
-      case 'anchorY':
-      case 'scaleX':
-      case 'scaleY':
-      case 'angle': {
+      case "anchorX":
+      case "anchorY":
+      case "scaleX":
+      case "scaleY":
+      case "angle": {
         if (!/^-?[0-9]*(\.?[0-9]*)?$/.test(value)) {
           value = this.props.mapObject[prop];
         }
         break;
       }
-      case 'notes': {
+      case "notes": {
         let changed = false;
         const oldMeta = this.props.mapObject.meta;
         const newMeta = Store.makeMeta(value);
@@ -66,120 +61,124 @@ export default class ToolbarProperties extends React.Component {
           }
         }
         if (changed) {
-          this.updateProperty('meta', newMeta);
+          this.updateProperty("meta", newMeta);
         }
         break;
       }
     }
     this.updateProperty(prop, value);
-  }
+  };
   onWheel = (e) => {
     e.preventDefault();
     const prop = e.target.name;
     const dir = e.deltaY > 0 ? -1 : 1;
     let value = Number(e.target.value) || 0;
     switch (prop) {
-      case 'cols':
-      case 'rows':
-      case 'x':
-      case 'y':
-      case 'z':
-      case 'angle': {
+      case "cols":
+      case "rows":
+      case "x":
+      case "y":
+      case "z":
+      case "angle": {
         value += 1 * dir;
         break;
       }
-      case 'scaleX':
-      case 'scaleY':
-      case 'anchorX':
-      case 'anchorY': {
+      case "scaleX":
+      case "scaleY":
+      case "anchorX":
+      case "anchorY": {
         value += 0.1 * dir;
         break;
       }
     }
     this.updateProperty(prop, String(value));
-  }
+  };
   openFile = () => {
     const filePaths = remote.dialog.showOpenDialogSync({
-      title: 'Select Image',
+      title: "Select Image",
       defaultPath: this.props.mapObject.filePath,
-      filters: [{
-        name: 'Images',
-        extensions: ['jpg', 'png']
-      }]
-    })
-      if (!filePaths) return;
-      let filePath = path.relative(this.props.projectPath, filePaths[0]);
-      this.updateProperty('isQSprite', Store.isQSprite(filePath));
-      this.updateProperty('pose', '');
-      this.updateProperty('filePath', filePath);
-  }
+      filters: [
+        {
+          name: "Images",
+          extensions: ["jpg", "png"],
+        },
+      ],
+    });
+    if (!filePaths) return;
+    let filePath = path.relative(this.props.projectPath, filePaths[0]);
+    this.updateProperty("isQSprite", Store.isQSprite(filePath));
+    this.updateProperty("pose", "");
+    this.updateProperty("filePath", filePath);
+  };
   openSelectCondition = (e) => {
-    const {
-      projectPath,
-      mapObject
-    } = this.props;
+    const { projectPath, mapObject } = this.props;
     const conditions = toJS(mapObject.conditions);
     const index = Number(e.target.value);
-    ipcRenderer.send('openSelectCondition', {
+    ipcRenderer.send("openSelectCondition", {
       projectPath,
-      conditions, index
-    });
-  }
-  onSetCondition = (e, data) => {
-    const {
+      conditions,
       index,
-      type,
-      value
-    } = data;
+    });
+  };
+  onSetCondition = (e, data) => {
+    const { index, type, value } = data;
     if (index === -1) {
       this.props.mapObject.conditions.push({
         type,
-        value
+        value,
       });
     } else {
       this.props.mapObject.conditions[index] = {
         type,
-        value
-      }
+        value,
+      };
     }
-  }
+  };
   onDeleteCondition = (e) => {
     const index = Number(e.target.id);
     this.props.mapObject.conditions.splice(index, 1);
-  }
+  };
   openSelectIndex = () => {
-    const {
-      projectPath
-    } = this.props;
-    const {
+    const { projectPath } = this.props;
+    const { filePath, cols, rows, index, height, width } = this.props.mapObject;
+    ipcRenderer.send("openSelectFrame", {
+      projectPath,
       filePath,
-      cols, rows, index,
-      height, width
-    } = this.props.mapObject;
-    ipcRenderer.send('openSelectFrame', {
-      projectPath, filePath,
-      cols, rows, index,
+      cols,
+      rows,
+      index,
       width: width * cols,
-      height: height * rows
+      height: height * rows,
     });
-  }
+  };
   onSetIndex = (e, value) => {
-    this.updateProperty('index', value);
-  }
+    this.updateProperty("index", value);
+  };
   addExtra = () => {
     // TODO
-  }
+  };
   body() {
     const {
       name,
-      x, y, z,
-      scaleX, scaleY, angle,
-      anchorX, anchorY,
-      filePath, type,
-      cols, rows, index, speed,
+      x,
+      y,
+      z,
+      scaleX,
+      scaleY,
+      angle,
+      anchorX,
+      anchorY,
+      filePath,
+      type,
+      cols,
+      rows,
+      index,
+      speed,
       conditions,
-      notes, meta,
-      isQSprite, pose
+      notes,
+      meta,
+      isQSprite,
+      pose,
     } = this.props.mapObject;
     // TODO make each block a seperate component?
     return (
@@ -192,16 +191,14 @@ export default class ToolbarProperties extends React.Component {
         {!isQSprite && this.block6(type, cols, rows, index, speed)}
         {this.block7(conditions)}
         {this.block8(notes)}
-        { /*this.block9(meta)*/}
+        {/*this.block9(meta)*/}
       </div>
-    )
+    );
   }
   block1(name) {
     return (
       <div className="props">
-        <div className="full">
-          Name
-        </div>
+        <div className="full">Name</div>
         <div className="full">
           <input
             type="text"
@@ -211,20 +208,14 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
       </div>
-    )
+    );
   }
   block2(x, y, z) {
     return (
       <div className="props">
-        <div className="third">
-          x
-        </div>
-        <div className="third">
-          y
-        </div>
-        <div className="third">
-          z
-        </div>
+        <div className="third">x</div>
+        <div className="third">y</div>
+        <div className="third">z</div>
         <div className="third">
           <input
             type="text"
@@ -253,20 +244,14 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
       </div>
-    )
+    );
   }
   block3(scaleX, scaleY, angle) {
     return (
       <div className="props">
-        <div className="third">
-          ScaleX
-        </div>
-        <div className="third">
-          ScaleY
-        </div>
-        <div className="third">
-          Angle
-        </div>
+        <div className="third">ScaleX</div>
+        <div className="third">ScaleY</div>
+        <div className="third">Angle</div>
         <div className="third">
           <input
             type="text"
@@ -295,17 +280,13 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
       </div>
-    )
+    );
   }
   block4(anchorX, anchorY) {
     return (
       <div className="props">
-        <div className="half">
-          Anchor X
-        </div>
-        <div className="half">
-          Anchor Y
-        </div>
+        <div className="half">Anchor X</div>
+        <div className="half">Anchor Y</div>
         <div className="half">
           <input
             type="text"
@@ -325,7 +306,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
       </div>
-    )
+    );
   }
   block5(filePath, type, pose, isQSprite) {
     if (isQSprite) {
@@ -333,16 +314,10 @@ export default class ToolbarProperties extends React.Component {
     }
     return (
       <div className="props">
+        <div className="half">Image</div>
+        <div className="half">Type</div>
         <div className="half">
-          Image
-        </div>
-        <div className="half">
-          Type
-        </div>
-        <div className="half">
-          <button onClick={this.openFile}>
-            Select File
-          </button>
+          <button onClick={this.openFile}>Select File</button>
           {filePath}
         </div>
         <div className="half">
@@ -353,7 +328,7 @@ export default class ToolbarProperties extends React.Component {
           </select>
         </div>
       </div>
-    )
+    );
   }
   block5B(filePath, pose, isQSprite) {
     const { poses } = Store.getQSprite(isQSprite);
@@ -364,21 +339,15 @@ export default class ToolbarProperties extends React.Component {
           <option key={`pose-${pose}`} value={pose}>
             {pose}
           </option>
-        )
+        );
       }
     }
     return (
       <div className="props">
+        <div className="half">Image</div>
+        <div className="half">Pose</div>
         <div className="half">
-          Image
-        </div>
-        <div className="half">
-          Pose
-        </div>
-        <div className="half">
-          <button onClick={this.openFile}>
-            Select File
-          </button>
+          <button onClick={this.openFile}>Select File</button>
           {filePath}
         </div>
         <div className="half">
@@ -388,30 +357,16 @@ export default class ToolbarProperties extends React.Component {
           </select>
         </div>
       </div>
-    )
+    );
   }
   block6(type, cols, rows, index, speed) {
-    if (type !== 'spritesheet' && type !== 'animated') return null;
+    if (type !== "spritesheet" && type !== "animated") return null;
     return (
       <div className="props">
-        <div className="third">
-          Cols
-        </div>
-        <div className="third">
-          Rows
-        </div>
-        {
-          type === 'spritesheet' &&
-          <div className="third">
-            Index
-          </div>
-        }
-        {
-          type === 'animated' &&
-          <div className="third">
-            Speed
-          </div>
-        }
+        <div className="third">Cols</div>
+        <div className="third">Rows</div>
+        {type === "spritesheet" && <div className="third">Index</div>}
+        {type === "animated" && <div className="third">Speed</div>}
         <div className="third">
           <input
             type="text"
@@ -430,16 +385,12 @@ export default class ToolbarProperties extends React.Component {
             value={rows}
           />
         </div>
-        {
-          type === 'spritesheet' &&
+        {type === "spritesheet" && (
           <div className="third">
-            <button onClick={this.openSelectIndex}>
-              Select
-            </button>
+            <button onClick={this.openSelectIndex}>Select</button>
           </div>
-        }
-        {
-          type === 'animated' &&
+        )}
+        {type === "animated" && (
           <div className="third">
             <input
               type="text"
@@ -448,38 +399,26 @@ export default class ToolbarProperties extends React.Component {
               value={speed}
             />
           </div>
-        }
+        )}
       </div>
-    )
+    );
   }
   block7(conditions) {
     return (
       <div className="props">
-        <div className="full">
-          Conditions
-        </div>
+        <div className="full">Conditions</div>
         <div className="full conditions">
           {conditions.map((v, i) => {
-            const {
-              type,
-              value
-            } = v;
+            const { type, value } = v;
             return (
               <div
                 value={i}
                 className="full condition"
                 key={`condition-${i}`}
-                onDoubleClick={this.openSelectCondition}>
-                <div className="col1">
-                  {
-                    type.toUpperCase()
-                  }
-                </div>
-                <div className="col2">
-                  {
-                    value.join(': ')
-                  }
-                </div>
+                onDoubleClick={this.openSelectCondition}
+              >
+                <div className="col1">{type.toUpperCase()}</div>
+                <div className="col2">{value.join(": ")}</div>
                 <i
                   onClick={this.onDeleteCondition}
                   id={i}
@@ -487,7 +426,7 @@ export default class ToolbarProperties extends React.Component {
                   aria-hidden
                 />
               </div>
-            )
+            );
           })}
         </div>
         <div className="full">
@@ -496,52 +435,42 @@ export default class ToolbarProperties extends React.Component {
           </button>
         </div>
       </div>
-    )
+    );
   }
   block8(notes) {
     return (
       <div className="props">
+        <div className="full">Notes</div>
         <div className="full">
-          Notes
-        </div>
-        <div className="full">
-          <textarea
-            onChange={this.onChange}
-            name="notes"
-            value={notes}
-          />
+          <textarea onChange={this.onChange} name="notes" value={notes} />
         </div>
       </div>
-    )
+    );
   }
   block9(meta) {
     return (
       <div className="props">
-        <div className="full">
-          Extras
-        </div>
+        <div className="full">Extras</div>
         <div className="full">
           <button onClick={this.addExtra}>
             <i className="fa fa-plus" aria-hidden />
             New
           </button>
         </div>
-        { /* TODO show list of set extras here */}
+        {/* TODO show list of set extras here */}
       </div>
-    )
+    );
   }
   render() {
-    const {
-      mapObject
-    } = this.props;
+    const { mapObject } = this.props;
     const style = {
-      right: mapObject ? 0 : -225
-    }
+      right: mapObject ? 0 : -225,
+    };
     return (
       <div className="toolbar properties" style={style}>
         <div className="header">Object Properties</div>
         {mapObject && this.body()}
       </div>
-    )
+    );
   }
 }

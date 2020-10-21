@@ -16,14 +16,12 @@ export default class RecentProject extends React.Component {
       Store.setUserData("recentProjectPaths", []);
       items = [];
       this.setState(this.state);
-    }
+    };
 
     return (
       <div>
         {!isLoaded && <ul>{items}</ul>}
-        {paths.length > 0 && (
-          <button onClick={clearList}>Clear list</button>
-        )}
+        {paths.length > 0 && <button onClick={clearList}>Clear list</button>}
       </div>
     );
   }

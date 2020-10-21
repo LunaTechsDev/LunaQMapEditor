@@ -1,22 +1,22 @@
-import React from 'react'
+import React from "react";
 
 export default class Divider extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       dragging: false,
-      y: 0
-    }
+      y: 0,
+    };
   }
   onDragStart = (event) => {
     this.setState({
       dragging: true,
-      y: event.pageY
-    })
-  }
+      y: event.pageY,
+    });
+  };
   onDragEnd = (event) => {
     this.setState({ dragging: false });
-  }
+  };
   onDrag = (event) => {
     if (this.state.dragging) {
       let dy = this.state.y - event.pageY;
@@ -32,23 +32,23 @@ export default class Divider extends React.Component {
       block2.height += dy;
       this.props.onResizeBlocks(block1, block2);
       this.setState({
-        y: event.pageY
-      })
+        y: event.pageY,
+      });
     }
-  }
+  };
   render() {
     const wrapper = {
-      position: 'absolute',
+      position: "absolute",
       top: 0,
-      height: '100%',
-      width: '100%',
-      display: this.state.dragging ? 'block' : 'none',
-      cursor: 'ns-resize'
-    }
+      height: "100%",
+      width: "100%",
+      display: this.state.dragging ? "block" : "none",
+      cursor: "ns-resize",
+    };
     return (
       <div>
         <div
-          className='divider'
+          className="divider"
           onMouseDown={this.onDragStart}
           onMouseUp={this.onDragEnd}
         />
@@ -59,6 +59,6 @@ export default class Divider extends React.Component {
           onMouseUp={this.onDragEnd}
         />
       </div>
-    )
+    );
   }
 }

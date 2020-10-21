@@ -1,23 +1,24 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
+  <head>
+    <title>Set a Condition</title>
+    <link rel="stylesheet" id="cssLight" href="css/styleLight.css" />
+    <link rel="stylesheet" id="cssDark" href="css/styleDark.css" />
+  </head>
 
-<head>
-  <title>Set a Condition</title>
-  <link rel="stylesheet" id="cssLight" href="css/styleLight.css">
-  <link rel="stylesheet" id="cssDark" href="css/styleDark.css">
-</head>
-
-<body oncontextmenu="return false;" class="secondary">
-  <div id="conditionSelect"></div>
-  <script>
-    const theme = require('electron').ipcRenderer.sendSync('getProp', 'theme');
-    document.getElementById('cssLight').disabled = theme !== 'light';
-    document.getElementById('cssDark').disabled = theme === 'light';
-    if (process.env.PRODUCTION === 'false') {
-      require('babel-register');
-    }
-    require('./js/renderer/selectCondition');
-  </script>
-</body>
-
+  <body oncontextmenu="return false;" class="secondary">
+    <div id="conditionSelect"></div>
+    <script>
+      const theme = require("electron").ipcRenderer.sendSync(
+        "getProp",
+        "theme"
+      );
+      document.getElementById("cssLight").disabled = theme !== "light";
+      document.getElementById("cssDark").disabled = theme === "light";
+      if (process.env.PRODUCTION === "false") {
+        require("babel-register");
+      }
+      require("./js/renderer/selectCondition");
+    </script>
+  </body>
 </html>

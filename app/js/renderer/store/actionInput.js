@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionInput extends C {
@@ -8,8 +8,8 @@ export default (C) => {
 
     constructor() {
       super();
-      document.addEventListener('keydown', this._onKeydown);
-      document.addEventListener('keyup', this._onKeyup);
+      document.addEventListener("keydown", this._onKeydown);
+      document.addEventListener("keyup", this._onKeyup);
     }
 
     isTriggered(keyCode) {
@@ -52,5 +52,5 @@ export default (C) => {
       this._lastDown = null;
       this._lastReleased = null;
     }
-  }
-}
+  };
+};

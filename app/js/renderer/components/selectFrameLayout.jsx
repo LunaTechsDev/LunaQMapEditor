@@ -1,13 +1,13 @@
-import React from 'react'
-import { ipcRenderer } from 'electron'
+import React from "react";
+import { ipcRenderer } from "electron";
 
 export default class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       height: props.height,
-      selected: props.data.index
-    }
+      selected: props.data.index,
+    };
   }
   componentDidMount() {
     window.onresize = this.onResize.bind(this);
@@ -16,13 +16,13 @@ export default class Layout extends React.Component {
     this.setState({ height: window.innerHeight });
   }
   getImgPath() {
-    let filePath = this.props.data.filePath.split('\\');
-    let file = filePath.pop().split('.');
+    let filePath = this.props.data.filePath.split("\\");
+    let file = filePath.pop().split(".");
     file[0] = encodeURIComponent(file[0]);
-    file = file.join('.');
+    file = file.join(".");
     filePath.push(file);
-    filePath = filePath.join('\\');
-    return this.props.data.projectPath + '\\' + filePath;
+    filePath = filePath.join("\\");
+    return this.props.data.projectPath + "\\" + filePath;
   }
   makeFrames() {
     let divs = [];
@@ -36,20 +36,20 @@ export default class Layout extends React.Component {
         width: w,
         height: h,
         top: y * h,
-        left: x * w
-      }
-      let clss = 'index';
+        left: x * w,
+      };
+      let clss = "index";
       if (i === this.state.selected) {
-        clss += ' selected'
+        clss += " selected";
       }
-      divs.push((
+      divs.push(
         <div
           key={i}
           className={clss}
           style={style}
           onClick={this.onClick.bind(this, i)}
         />
-      ))
+      );
     }
     return divs;
   }
@@ -57,30 +57,26 @@ export default class Layout extends React.Component {
     this.setState({ selected: index });
   }
   onOk = () => {
-    ipcRenderer.send('setFrameIndex', this.state.selected);
+    ipcRenderer.send("setFrameIndex", this.state.selected);
     window.close();
-  }
+  };
   render() {
     const frames = this.makeFrames();
     const style = {
       height: this.state.height - 35,
-      position: 'relative'
-    }
+      position: "relative",
+    };
     return (
       <div>
-        <div className='frameSelect' style={style}>
-          <img src={this.getImgPath()}/>
-          { frames }
+        <div className="frameSelect" style={style}>
+          <img src={this.getImgPath()} />
+          {frames}
         </div>
-        <div className='fixedRight'>
-          <button onClick={this.onOk}>
-            Ok
-          </button>
-          <button onClick={window.close}>
-            Cancel
-          </button>
+        <div className="fixedRight">
+          <button onClick={this.onOk}>Ok</button>
+          <button onClick={window.close}>Cancel</button>
         </div>
       </div>
-    )
+    );
   }
 }

@@ -1,4 +1,1 @@
-export default [
-  'styleLight',
-  'styleDark'
-]
+export default ["styleLight", "styleDark"];

@@ -1,4 +1,4 @@
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionNotifications extends C {
@@ -6,13 +6,13 @@ export default (C) => {
     notify(type, msg, duration = -1) {
       this.notifications.push({
         type,
-        msg
-      })
+        msg,
+      });
       if (duration > 0) {
         let obj = this.notifications[this.notifications.length - 1];
         obj.timeout = window.setTimeout(() => {
           this.clearNotification(obj);
-        }, duration)
+        }, duration);
       }
     }
 
@@ -23,5 +23,5 @@ export default (C) => {
       this.notifications.splice(i, 1);
       if (obj.timeout) window.clearTimeout(obj.timeout);
     }
-  }
-}
+  };
+};

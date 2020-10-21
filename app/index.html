@@ -1,20 +1,18 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
+  <head>
+    <title>Map Editor</title>
+    <link rel="stylesheet" id="cssLight" href="css/styleLight.css" />
+    <link rel="stylesheet" id="cssDark" href="css/styleDark.css" />
+  </head>
 
-<head>
-  <title>Map Editor</title>
-  <link rel="stylesheet" id="cssLight" href="css/styleLight.css">
-  <link rel="stylesheet" id="cssDark" href="css/styleDark.css">
-</head>
-
-<body oncontextmenu="return false;">
-  <div id="app"></div>
-  <script>
-    if (process.env.PRODUCTION === 'false') {
-      require('babel-register');
-    }
-    require('./js/renderer/app.js');
-  </script>
-</body>
-
+  <body oncontextmenu="return false;">
+    <div id="app"></div>
+    <script>
+      if (process.env.PRODUCTION === "false") {
+        require("babel-register");
+      }
+      require("./js/renderer/app.js");
+    </script>
+  </body>
 </html>

@@ -1,10 +1,10 @@
-import Store from './../store'
-import { observe } from 'mobx'
-import Sprite from './sprite'
-import * as PIXI from 'pixi.js'
+import Store from "./../store";
+import { observe } from "mobx";
+import Sprite from "./sprite";
+import * as PIXI from "pixi.js";
 
-const TILE_COLOR = 0xFFFFFF;
-const TILE_OUTLINE = 0xE0E0E0;
+const TILE_COLOR = 0xffffff;
+const TILE_OUTLINE = 0xe0e0e0;
 
 const ZOOM_AMT = 0.1;
 const ZOOM_MIN = 0.1;
@@ -31,7 +31,7 @@ class Stage extends PIXI.Container {
     this.addChild(this._mapEvents);
   }
   addListeners() {
-    observe(Store, 'currentMap', this.onCurrentMapChange);
+    observe(Store, "currentMap", this.onCurrentMapChange);
   }
   onCurrentMapChange = (change) => {
     PIXI.utils.clearTextureCache();
@@ -42,28 +42,27 @@ class Stage extends PIXI.Container {
     }
     if (id !== -1 && Store.mapData) {
       this.alpha = 1;
-      this.setSize(Store.mapData.width, Store.mapData.height)
+      this.setSize(Store.mapData.width, Store.mapData.height);
       this.setObjects(Store.mapObjects);
       this.drawMapBG();
       this.drawMapEvents(Store.mapData.events);
-      this._observing = observe(Store.mapObjects, this.onMapObjectsChange.bind(this));
+      this._observing = observe(
+        Store.mapObjects,
+        this.onMapObjectsChange.bind(this)
+      );
     } else {
       this.alpha = 0;
     }
-  }
+  };
   onMapObjectsChange(change) {
-    const {
-      type,
-      added,
-      removed
-    } = change;
-    if (type === 'splice') {
+    const { type, added, removed } = change;
+    if (type === "splice") {
       added.forEach((obj) => {
         this.addObject(obj);
-      })
+      });
       removed.forEach((obj) => {
         this.removeObject(obj);
-      })
+      });
       this.sortObjects();
     }
   }
@@ -99,12 +98,12 @@ class Stage extends PIXI.Container {
       if (events[i]) {
         const { x, y } = events[i];
         const style = {
-          fontFamily: 'Roboto',
-          fontWeight: 'bold',
-          fill: 0x00FFFF,
-          strokeThickness: 0.5
-        }
-        const sprite = new PIXI.Text('E', style);
+          fontFamily: "Roboto",
+          fontWeight: "bold",
+          fill: 0x00ffff,
+          strokeThickness: 0.5,
+        };
+        const sprite = new PIXI.Text("E", style);
         sprite.anchor.x = 0.5;
         sprite.anchor.y = 0.5;
         sprite.x = (x + 0.5) * this._gridWidth;
@@ -135,7 +134,7 @@ class Stage extends PIXI.Container {
       } else {
         return a.y - b.y;
       }
-    })
+    });
     this._hasSorted = true;
   }
   addObject(obj) {
@@ -182,7 +181,7 @@ class Stage extends PIXI.Container {
       Store.selectMapObj(-1);
       Store.renderer.render(this, renderTexture);
       let image = Store.renderer.extract.base64(renderTexture);
-      image = image.replace(/^data:image\/\w+;base64,/, '');
+      image = image.replace(/^data:image\/\w+;base64,/, "");
       Store.saveScreenshot(image);
       Store.selectMapObj(selected);
       this.x = oldX;

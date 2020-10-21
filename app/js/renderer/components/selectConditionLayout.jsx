@@ -1,31 +1,28 @@
-import React from 'react'
-import { ipcRenderer } from 'electron'
-import fs from 'fs'
-import path from 'path'
+import React from "react";
+import { ipcRenderer } from "electron";
+import fs from "fs";
+import path from "path";
 
 export default class Layout extends React.Component {
   constructor(props) {
     super(props);
-    let type = 'switch';
-    let value = ['0', 'true'];
-    const {
-      conditions,
-      index
-    } = props;
+    let type = "switch";
+    let value = ["0", "true"];
+    const { conditions, index } = props;
     if (index >= 0) {
       type = conditions[index].type;
       value = conditions[index].value;
     }
     this.disabledSwitches = [];
     this.disabledVariables = [];
-    conditions.forEach(v => {
+    conditions.forEach((v) => {
       if (!v) return;
       const i = v.value[0];
       if (value[0] === i) return;
-      if (v.type === 'switch') {
+      if (v.type === "switch") {
         this.disabledSwitches.push(Number(i));
       }
-      if (v.type === 'var') {
+      if (v.type === "var") {
         this.disabledVariables.push(Number(i));
       }
     });
@@ -33,125 +30,121 @@ export default class Layout extends React.Component {
       type,
       value,
       switches: [],
-      variables: []
-    }
+      variables: [],
+    };
   }
   componentWillMount() {
     const { projectPath } = this.props;
-    const filePath = path.join(projectPath, './data/System.json');
+    const filePath = path.join(projectPath, "./data/System.json");
     let system;
     try {
-      system = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    } catch(e) {
+      system = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    } catch (e) {
       system = {
         switches: [],
-        variables: []
-      }
+        variables: [],
+      };
     }
-    const {
-      switches,
-      variables
-    } = system;
+    const { switches, variables } = system;
     this.setState({
       switches,
-      variables
+      variables,
     });
   }
   onOk = () => {
-    const {
-      type,
-      value
-    } = this.state;
+    const { type, value } = this.state;
     const isOk = this.checkIfOk();
     if (isOk === true) {
-      ipcRenderer.send('setCondition', {
+      ipcRenderer.send("setCondition", {
         index: this.props.index,
         type,
-        value
+        value,
       });
       window.close();
     } else {
       const errs = {
-        'empty-js': 'JS field is empty',
-        'empty-switch': 'No Switch selected',
-        'empty-var': 'No Variable selected',
-        'disabled-switch': 'The Switch is already in the condition list',
-        'disabled-var': 'The Variable is already in the condition list'
-      }
-      window.alert(`Error: ${errs[`${isOk}-${type}`] || '???'}`);
+        "empty-js": "JS field is empty",
+        "empty-switch": "No Switch selected",
+        "empty-var": "No Variable selected",
+        "disabled-switch": "The Switch is already in the condition list",
+        "disabled-var": "The Variable is already in the condition list",
+      };
+      window.alert(`Error: ${errs[`${isOk}-${type}`] || "???"}`);
     }
-  }
+  };
   checkIfOk() {
-    const {
-      type,
-      value
-    } = this.state;
+    const { type, value } = this.state;
     if (!value[0] || !value[0].trim()) {
-      return 'empty';
+      return "empty";
     }
-    if (type === 'js') {
+    if (type === "js") {
       return true;
     }
-    if (value[0] === '0') {
-      return 'empty';
+    if (value[0] === "0") {
+      return "empty";
     }
-    const disabled = type === 'switch' ? this.disabledSwitches : this.disabledVariables;
+    const disabled =
+      type === "switch" ? this.disabledSwitches : this.disabledVariables;
     if (disabled.includes(Number(value[0]))) {
-      return 'disabled';
+      return "disabled";
     }
     return true;
   }
   onTypeChange = (e) => {
     const type = e.target.value;
     let value = [];
-    if (type === 'switch') {
-      value = ['1', 'true'];
-    } else if (type === 'var') {
-      value = ['1', ''];
+    if (type === "switch") {
+      value = ["1", "true"];
+    } else if (type === "var") {
+      value = ["1", ""];
     }
     this.setState({
       type,
-      value
+      value,
     });
-  }
+  };
   onValueChange = (e) => {
     let value = [...this.state.value];
     let i = 0;
-    if (e.target.className === 'col1') i = 0;
-    if (e.target.className === 'col2') i = 1;
+    if (e.target.className === "col1") i = 0;
+    if (e.target.className === "col2") i = 1;
     value[i] = e.target.value;
     this.setState({
-      value
+      value,
     });
-  }
+  };
   renderValue() {
-    const {
-      type
-    } = this.state;
+    const { type } = this.state;
     if (!type) return null;
-    if (type === 'switch') {
+    if (type === "switch") {
       return this.renderSwitch();
     }
-    if (type === 'var') {
+    if (type === "var") {
       return this.renderVar();
     }
-    if (type === 'js') {
+    if (type === "js") {
       return this.renderJS();
     }
   }
   renderSwitch() {
-    const {
-      switches,
-      value
-    } = this.state;
+    const { switches, value } = this.state;
     return (
       <div>
-        <select size="10" className="col1" onChange={this.onValueChange} value={value[0]}>
+        <select
+          size="10"
+          className="col1"
+          onChange={this.onValueChange}
+          value={value[0]}
+        >
           {switches.map((name, i) => {
-            name = name || '-UNNAMED-';
+            name = name || "-UNNAMED-";
             if (i > 0) {
               return (
-                <option value={i} key={`switch-${i}`} disabled={this.disabledSwitches.includes(i)}>
+                <option
+                  value={i}
+                  key={`switch-${i}`}
+                  disabled={this.disabledSwitches.includes(i)}
+                >
                   {`${i}. ${name}`}
                 </option>
               );
@@ -164,21 +157,27 @@ export default class Layout extends React.Component {
           <option value="false">Off</option>
         </select>
       </div>
-    )
+    );
   }
   renderVar() {
-    const {
-      variables,
-      value
-    } = this.state;
+    const { variables, value } = this.state;
     return (
       <div>
-        <select size="10" className="col1" onChange={this.onValueChange} value={value[0]}>
+        <select
+          size="10"
+          className="col1"
+          onChange={this.onValueChange}
+          value={value[0]}
+        >
           {variables.map((name, i) => {
-            name = name || '-UNNAMED-';
+            name = name || "-UNNAMED-";
             if (i > 0) {
               return (
-                <option value={i} key={`var-${i}`} disabled={this.disabledVariables.includes(i)}>
+                <option
+                  value={i}
+                  key={`var-${i}`}
+                  disabled={this.disabledVariables.includes(i)}
+                >
                   {`${i}. ${name}`}
                 </option>
               );
@@ -191,15 +190,13 @@ export default class Layout extends React.Component {
           className="col2"
           onChange={this.onValueChange}
           placeholder="Value"
-          value={value[1] || ''}
+          value={value[1] || ""}
         />
       </div>
-    )
+    );
   }
   renderJS() {
-    const {
-      value
-    } = this.state;
+    const { value } = this.state;
     return (
       <input
         type="text"
@@ -208,45 +205,29 @@ export default class Layout extends React.Component {
         placeholder="JS to eval"
         value={value[0]}
       />
-    )
+    );
   }
   render() {
-    const {
-      type
-    } = this.state;
+    const { type } = this.state;
     return (
       <div className="conditionSelect">
         <div className="header">
-          <span className="type">
-            Type
-          </span>
+          <span className="type">Type</span>
           <select onChange={this.onTypeChange} value={type}>
-            <option value="switch">
-              Switch
-            </option>
-            <option value="var">
-              Variable
-            </option>
-            <option value="js">
-              Script
-            </option>
+            <option value="switch">Switch</option>
+            <option value="var">Variable</option>
+            <option value="js">Script</option>
           </select>
         </div>
         <div className="body">
-          <span className="value">
-            Value
-          </span>
-          { this.renderValue() }
+          <span className="value">Value</span>
+          {this.renderValue()}
         </div>
-        <div className='fixedRight'>
-          <button onClick={this.onOk}>
-            Ok
-          </button>
-          <button onClick={window.close}>
-            Cancel
-          </button>
+        <div className="fixedRight">
+          <button onClick={this.onOk}>Ok</button>
+          <button onClick={window.close}>Cancel</button>
         </div>
       </div>
-    )
+    );
   }
 }

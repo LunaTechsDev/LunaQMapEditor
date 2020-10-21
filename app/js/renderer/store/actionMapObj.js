@@ -1,12 +1,12 @@
-import MapObj from './JSONMapObj'
+import MapObj from "./JSONMapObj";
 
-import { action } from 'mobx'
+import { action } from "mobx";
 
 export default (C) => {
   return class ActionMapObj extends C {
     @action.bound
     addMapObj(data = {}) {
-      let newMapObj = this.createMapObj(data)
+      let newMapObj = this.createMapObj(data);
       this.mapObjects.push(newMapObj);
       this.selectMapObj(this.mapObjects.length - 1);
       return newMapObj;
@@ -16,16 +16,13 @@ export default (C) => {
     createMapObj(data) {
       return {
         ...MapObj,
-        ...data
-      }
+        ...data,
+      };
     }
 
     @action.bound
     moveMapObj(data) {
-      const {
-        oldIndex,
-        newIndex
-      } = data;
+      const { oldIndex, newIndex } = data;
       this.arrMove(this.mapObjects, oldIndex, newIndex);
     }
 
@@ -50,18 +47,15 @@ export default (C) => {
       if (!mapObj) return;
       this.mapObjects.push({
         ...MapObj,
-        ...JSON.parse(JSON.stringify(mapObj))
-      })
+        ...JSON.parse(JSON.stringify(mapObj)),
+      });
       this.selectMapObj(this.mapObjects.length - 1);
     }
 
     @action.bound
     isQSprite(filePath) {
       if (!this.hasQSprite || !filePath) return false;
-      const {
-        identifier,
-        configs
-      } = this.QSprite;
+      const { identifier, configs } = this.QSprite;
       const config = identifier.exec(filePath);
       if (!config || !configs[config[1]]) return false;
       return config[1];
@@ -71,5 +65,5 @@ export default (C) => {
     getQSprite(config) {
       return this.QSprite.configs[config];
     }
-  }
-}
+  };
+};
