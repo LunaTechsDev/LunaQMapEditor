@@ -12,6 +12,8 @@
   "scripts": {
     "start": "electron ./dist/ --dev",
     "compile": "rollup -c & electron-builder build --x64 -p never",
+    "compile:linux": "rollup -c & electron-builder build --linux -p never",
+    "compile:mac": "rollup -c & electron-builder build --mac -p never",
     "build": "rollup -c"
   },
   "dependencies": {
@@ -42,18 +44,27 @@
     "rollup-plugin-copy": "^3.3.0"
   },
   "build": {
+    "artifactName": "Luna_${productName}-${os}-${arch}.${ext}",
     "directories": {
       "app": "dist",
       "output": "releases"
     },
+    "linux": {
+      "target": "zip",
+      "icon": "app/imgs/icon.png"
+    },
+    "mac": {
+      "target": "zip",
+      "icon": "app/imgs/icon.png"
+    },
     "win": {
-      "target": "nsis",
-      "icon": "app/imgs/icon.ico"
+      "target": ["nsis", "zip"],
+      "icon": "app/imgs/icon.png"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "artifactName": "LunaQMapEditor-Setup-win10-x64.${ext}"
+      "artifactName": "Luna_${productName}-${os}-${arch}-setup.${ext}"
     }
   }
 }
