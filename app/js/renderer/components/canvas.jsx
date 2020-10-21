@@ -39,6 +39,9 @@ export default class Canvas extends React.Component {
     Store.renderer.resize(width, height);
   };
   onClick = (event) => {
+    if (Store.currentMapObj > -1 && !Stage.isObjectAt(event.pageX, event.pageY)) {
+      Store.selectMapObj(-1);
+    }
     this.canvas.focus();
   };
   onMouseDown = (event) => {

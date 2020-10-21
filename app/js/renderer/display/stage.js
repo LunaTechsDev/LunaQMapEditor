@@ -244,6 +244,15 @@ class Stage extends PIXI.Container {
       renderTexture.destroy(true);
     }
   }
+  isObjectAt(x, y) {
+    let localPos = this.toLocal(new PIXI.Point(x, y));
+    x = localPos.x;
+    y = localPos.y;
+    const mapObjs = this._objContainer.children;
+    return mapObjs.some((o) => {
+      return x > o.x && x < o.x + o.width && y > o.y && y < o.y + o.height;
+    });
+  }
   update() {
     const mapObjs = this._objContainer.children;
     for (let i = 0; i < mapObjs.length; i++) {
