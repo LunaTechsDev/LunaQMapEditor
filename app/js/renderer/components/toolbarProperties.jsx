@@ -319,7 +319,7 @@ export default class ToolbarProperties extends React.Component {
           <button name="image" onClick={this.openFile}>
             Select File
           </button>
-          {filePath}
+          <small>{filePath}</small>
         </div>
         <div className="half">
           <label for="type">Type</label>
