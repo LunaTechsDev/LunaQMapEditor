@@ -198,8 +198,8 @@ export default class ToolbarProperties extends React.Component {
   block1(name) {
     return (
       <div className="props">
-        <div className="full">Name</div>
         <div className="full">
+          <label for="text">Name</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -213,10 +213,8 @@ export default class ToolbarProperties extends React.Component {
   block2(x, y, z) {
     return (
       <div className="props">
-        <div className="third">x</div>
-        <div className="third">y</div>
-        <div className="third">z</div>
         <div className="third">
+          <label for="x">x</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -226,6 +224,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="third">
+          <label for="y">y</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -235,6 +234,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="third">
+          <label for="z">z</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -249,10 +249,8 @@ export default class ToolbarProperties extends React.Component {
   block3(scaleX, scaleY, angle) {
     return (
       <div className="props">
-        <div className="third">ScaleX</div>
-        <div className="third">ScaleY</div>
-        <div className="third">Angle</div>
         <div className="third">
+          <label for="scaleX">ScaleX</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -262,6 +260,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="third">
+          <label for="scaleY">ScaleY</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -271,6 +270,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="third">
+          <label for="angle">Angle</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -285,9 +285,8 @@ export default class ToolbarProperties extends React.Component {
   block4(anchorX, anchorY) {
     return (
       <div className="props">
-        <div className="half">Anchor X</div>
-        <div className="half">Anchor Y</div>
         <div className="half">
+          <label for="anchorX">AnchorX</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -297,6 +296,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="half">
+          <label for="anchorY">AnchorY</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -314,13 +314,15 @@ export default class ToolbarProperties extends React.Component {
     }
     return (
       <div className="props">
-        <div className="half">Image</div>
-        <div className="half">Type</div>
         <div className="half">
-          <button onClick={this.openFile}>Select File</button>
+          <label for="image">Image</label>
+          <button name="image" onClick={this.openFile}>
+            Select File
+          </button>
           {filePath}
         </div>
         <div className="half">
+          <label for="type">Type</label>
           <select value={type} onChange={this.onChange} name="type">
             <option value="full">Full</option>
             <option value="spritesheet">SpriteSheet</option>
@@ -344,13 +346,15 @@ export default class ToolbarProperties extends React.Component {
     }
     return (
       <div className="props">
-        <div className="half">Image</div>
-        <div className="half">Pose</div>
         <div className="half">
-          <button onClick={this.openFile}>Select File</button>
+          <label for="image">Image</label>
+          <button name="image" onClick={this.openFile}>
+            Select File
+          </button>
           {filePath}
         </div>
         <div className="half">
+          <label for="pose">Pose</label>
           <select value={pose} onChange={this.onChange} name="pose">
             <option value=""></option>
             {list}
@@ -363,11 +367,8 @@ export default class ToolbarProperties extends React.Component {
     if (type !== "spritesheet" && type !== "animated") return null;
     return (
       <div className="props">
-        <div className="third">Cols</div>
-        <div className="third">Rows</div>
-        {type === "spritesheet" && <div className="third">Index</div>}
-        {type === "animated" && <div className="third">Speed</div>}
         <div className="third">
+          <label for="cols">Cols</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -377,6 +378,7 @@ export default class ToolbarProperties extends React.Component {
           />
         </div>
         <div className="third">
+          <label for="rows">Rows</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -387,11 +389,15 @@ export default class ToolbarProperties extends React.Component {
         </div>
         {type === "spritesheet" && (
           <div className="third">
-            <button onClick={this.openSelectIndex}>Select</button>
+            <label for="frame">Frame</label>
+            <button name="frame" onClick={this.openSelectIndex}>
+              Select
+            </button>
           </div>
         )}
         {type === "animated" && (
           <div className="third">
+            <label for="speed">Speed</label>
             <input
               type="text"
               onChange={this.onChange}
@@ -440,8 +446,8 @@ export default class ToolbarProperties extends React.Component {
   block8(notes) {
     return (
       <div className="props">
-        <div className="full">Notes</div>
         <div className="full">
+          <label for="notes">Notes</label>
           <textarea onChange={this.onChange} name="notes" value={notes} />
         </div>
       </div>
@@ -450,9 +456,9 @@ export default class ToolbarProperties extends React.Component {
   block9(meta) {
     return (
       <div className="props">
-        <div className="full">Extras</div>
         <div className="full">
-          <button onClick={this.addExtra}>
+          <label for="extras">Extras</label>
+          <button name="extras" onClick={this.addExtra}>
             <i className="fa fa-plus" aria-hidden />
             New
           </button>
