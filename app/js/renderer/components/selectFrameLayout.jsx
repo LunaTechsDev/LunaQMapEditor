@@ -8,12 +8,45 @@ export default class Layout extends React.Component {
       height: props.height,
       selected: props.data.index,
     };
+    this.canvas = null;
+    this.context = null;
+    this.image = new Image();
   }
   componentDidMount() {
     window.onresize = this.onResize.bind(this);
+    this.context = this.canvas.getContext("2d");
+    window.requestAnimationFrame((time => {
+      this.updateCanvas(time);
+    }))
+    this.image.src = this.getImgPath();
+    this.image.onload = () => {
+      this.refresh();
+    }
   }
   onResize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = this.props.data.height;
+    this.refresh();
     this.setState({ height: window.innerHeight });
+  }
+  getFrame(x, y) {
+      let frame = 0
+      const tileWidth = 48
+      const tileHeight = 48
+      const maxCols = iconsetWidth / iconWidth
+      const frameX = Math.floor(x / iconWidth)
+      const frameY = Math.floor(y / iconHeight)
+
+      if (frameY > 0) {
+        for (let i = -1; i < frameY; i++) {
+          frame += maxCols
+        }
+        frame = frame - Math.abs(frameX - maxCols)
+      } else {
+        frame = frameX
+      }
+
+      return frame
   }
   getImgPath() {
     let filePath = this.props.data.filePath.split("\\");
@@ -24,34 +57,30 @@ export default class Layout extends React.Component {
     filePath = filePath.join("\\");
     return this.props.data.projectPath + "\\" + filePath;
   }
-  makeFrames() {
-    let divs = [];
-    const max = this.props.data.cols * this.props.data.rows;
-    const w = this.props.data.width / this.props.data.cols;
-    const h = this.props.data.height / this.props.data.rows;
-    for (let i = 0; i < max; i++) {
-      const x = i % this.props.data.cols;
-      const y = Math.floor(i / this.props.data.cols);
-      let style = {
-        width: w,
-        height: h,
-        top: y * h,
-        left: x * w,
-      };
-      let clss = "index";
-      if (i === this.state.selected) {
-        clss += " selected";
-      }
-      divs.push(
-        <div
-          key={i}
-          className={clss}
-          style={style}
-          onClick={this.onClick.bind(this, i)}
-        />
-      );
+  refresh(){
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.draw();
+  }
+  draw() {
+    this.context.drawImage(this.image, 10, 10);
+    this.drawGrid();
+  }
+  drawGrid() {
+    const context = this.context;
+    const width = this.image.width;
+    const height = this.image.height;
+
+    for (let x = 0; x < width; x += 48) {
+      context.moveTo(0, x);
+      context.lineTo(width, x);
     }
-    return divs;
+    for (let y = 0; y < height; y += 48) {
+      context.moveTo(y, 0);
+      context.lineTo(y, height);
+    }
+
+    context.strokeStyle = "white";
+    context.stroke();
   }
   onClick(index) {
     this.setState({ selected: index });
@@ -60,8 +89,10 @@ export default class Layout extends React.Component {
     ipcRenderer.send("setFrameIndex", this.state.selected);
     window.close();
   };
+  updateCanvas(time) {
+    // 
+  }
   render() {
-    const frames = this.makeFrames();
     const style = {
       height: this.state.height - 35,
       position: "relative",
@@ -69,8 +100,7 @@ export default class Layout extends React.Component {
     return (
       <div>
         <div className="frameSelect" style={style}>
-          <img src={this.getImgPath()} />
-          {frames}
+          <canvas ref={(c) => (this.canvas = c)}></canvas>
         </div>
         <div className="fixedRight">
           <button onClick={this.onOk}>Ok</button>
