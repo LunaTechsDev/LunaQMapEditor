@@ -15,13 +15,13 @@ export default class Layout extends React.Component {
   componentDidMount() {
     window.onresize = this.onResize.bind(this);
     this.context = this.canvas.getContext("2d");
-    window.requestAnimationFrame((time => {
+    window.requestAnimationFrame((time) => {
       this.updateCanvas(time);
-    }))
+    });
     this.image.src = this.getImgPath();
     this.image.onload = () => {
       this.refresh();
-    }
+    };
   }
   onResize() {
     this.canvas.width = window.innerWidth;
@@ -30,23 +30,23 @@ export default class Layout extends React.Component {
     this.setState({ height: window.innerHeight });
   }
   getFrame(x, y) {
-      let frame = 0
-      const tileWidth = 48
-      const tileHeight = 48
-      const maxCols = iconsetWidth / iconWidth
-      const frameX = Math.floor(x / iconWidth)
-      const frameY = Math.floor(y / iconHeight)
+    let frame = 0;
+    const tileWidth = 48;
+    const tileHeight = 48;
+    const maxCols = iconsetWidth / iconWidth;
+    const frameX = Math.floor(x / iconWidth);
+    const frameY = Math.floor(y / iconHeight);
 
-      if (frameY > 0) {
-        for (let i = -1; i < frameY; i++) {
-          frame += maxCols
-        }
-        frame = frame - Math.abs(frameX - maxCols)
-      } else {
-        frame = frameX
+    if (frameY > 0) {
+      for (let i = -1; i < frameY; i++) {
+        frame += maxCols;
       }
+      frame = frame - Math.abs(frameX - maxCols);
+    } else {
+      frame = frameX;
+    }
 
-      return frame
+    return frame;
   }
   getImgPath() {
     let filePath = this.props.data.filePath.split("\\");
@@ -57,7 +57,7 @@ export default class Layout extends React.Component {
     filePath = filePath.join("\\");
     return this.props.data.projectPath + "\\" + filePath;
   }
-  refresh(){
+  refresh() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
   }
@@ -90,7 +90,7 @@ export default class Layout extends React.Component {
     window.close();
   };
   updateCanvas(time) {
-    // 
+    //
   }
   render() {
     const style = {
