@@ -183,19 +183,19 @@ export default class ToolbarProperties extends React.Component {
     // TODO make each block a seperate component?
     return (
       <div className="propsContainer">
-        {this.block1(name)}
-        {this.block2(x, y, z)}
-        {this.block3(scaleX, scaleY, angle)}
+        {this.nameBlock(name)}
+        {this.positionBlock(x, y, z)}
+        {this.transformBlock(scaleX, scaleY, angle)}
         {!isQSprite && this.block4(anchorX, anchorY)}
-        {this.block5(filePath, type, pose, isQSprite)}
+        {this.imageBlock(filePath, type, pose, isQSprite)}
         {!isQSprite && this.block6(type, cols, rows, index, speed)}
-        {this.block7(conditions)}
-        {this.block8(notes)}
+        {this.conditionsBlock(conditions)}
+        {this.notesBlock(notes)}
         {/*this.block9(meta)*/}
       </div>
     );
   }
-  block1(name) {
+  nameBlock(name) {
     return (
       <div className="props">
         <div className="full">
@@ -210,7 +210,7 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  block2(x, y, z) {
+  positionBlock(x, y, z) {
     return (
       <div className="props">
         <div className="third">
@@ -246,7 +246,7 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  block3(scaleX, scaleY, angle) {
+  transformBlock(scaleX, scaleY, angle) {
     return (
       <div className="props">
         <div className="third">
@@ -308,7 +308,7 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  block5(filePath, type, pose, isQSprite) {
+  imageBlock(filePath, type, pose, isQSprite) {
     if (isQSprite) {
       return this.block5B(filePath, pose, isQSprite);
     }
@@ -409,7 +409,7 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  block7(conditions) {
+  conditionsBlock(conditions) {
     return (
       <div className="props">
         <div className="full">Conditions</div>
@@ -443,7 +443,7 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  block8(notes) {
+  notesBlock(notes) {
     return (
       <div className="props">
         <div className="full">
