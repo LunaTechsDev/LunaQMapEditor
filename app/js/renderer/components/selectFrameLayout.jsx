@@ -67,13 +67,15 @@ export default class Layout extends React.Component {
   }
   drawGrid() {
     const context = this.context;
-    const width = this.image.width;
-    const height = this.image.height;
+    // We add 48 (tilesize) to width and height so we draw the last lines on the grid
+    const width = this.image.width + 48;
+    const height = this.image.height + 48;
 
-    for (let x = 0; x < width; x += 48) {
+    for (let x = 0; x < width + 48; x += 48) {
       context.moveTo(0, x);
       context.lineTo(width, x);
     }
+
     for (let y = 0; y < height; y += 48) {
       context.moveTo(y, 0);
       context.lineTo(y, height);
