@@ -10,29 +10,25 @@ export default class Layout extends React.Component {
     };
     this.canvas = null;
     this.context = null;
-    this.image = new Image();
   }
   componentDidMount() {
     window.onresize = this.onResize.bind(this);
     this.context = this.canvas.getContext("2d");
-    window.requestAnimationFrame((time) => {
-      this.updateCanvas(time);
-    });
+    if (!this.image) {
+    this.image = new Image();
     this.image.src = this.getImgPath();
-    this.image.onload = () => {
-      this.refresh();
-    };
+      this.image.onload = () => {
+        this.refresh();
+      };
+    }
   }
   onResize() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = this.props.data.height;
-    this.refresh();
     this.setState({ height: window.innerHeight });
   }
   getFrame(x, y) {
     let frame = 0;
-    const tileWidth = this.props.data.cols;
-    const tileHeight = this.props.data.rows;
+    const tileWidth = Number(this.props.data.cols);
+    const tileHeight = Number(this.props.data.rows);
     const maxCols = iconsetWidth / tileWidth;
     const frameX = Math.floor(x / tileWidth);
     const frameY = Math.floor(y / tileHeight);
@@ -58,25 +54,30 @@ export default class Layout extends React.Component {
     return this.props.data.projectPath + "\\" + filePath;
   }
   refresh() {
+    this.canvas.width = this.image.width;
+    this.canvas.height = this.image.height;
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
   }
   draw() {
-    this.context.drawImage(this.image, 10, 10);
+    this.context.drawImage(this.image, 0, 0);
     this.drawGrid();
   }
   drawGrid() {
     const context = this.context;
-    // We add 48 (tilesize) to width and height so we draw the last lines on the grid
-    const width = this.image.width + this.props.data.cols;
-    const height = this.image.height + this.props.data.rows;
+    const tileWidth = Number(this.props.data.cols);
+    const tileHeight = Number(this.props.data.rows);
 
-    for (let x = 0; x < width; x += this.props.data.cols) {
+    // We add (tilesize) to width and height so we draw the last lines on the grid
+    const width = this.image.width + tileWidth;
+    const height = this.image.height + tileHeight;
+    console.log(height)
+    for (let x = 0; x < height; x += tileWidth) {
       context.moveTo(0, x);
       context.lineTo(width, x);
     }
 
-    for (let y = 0; y < height; y += this.props.data.rows) {
+    for (let y = 0; y < width; y += tileHeight) {
       context.moveTo(y, 0);
       context.lineTo(y, height);
     }
@@ -99,10 +100,11 @@ export default class Layout extends React.Component {
       height: this.state.height - 35,
       position: "relative",
     };
+
     return (
       <div>
         <div className="frameSelect" style={style}>
-          <canvas ref={(c) => (this.canvas = c)}></canvas>
+          <canvas ref={(c) => this.canvas = c}></canvas>
         </div>
         <div className="fixedRight">
           <button onClick={this.onOk}>Ok</button>
