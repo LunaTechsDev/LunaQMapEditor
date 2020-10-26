@@ -31,11 +31,11 @@ export default class Layout extends React.Component {
   }
   getFrame(x, y) {
     let frame = 0;
-    const tileWidth = 48;
-    const tileHeight = 48;
-    const maxCols = iconsetWidth / iconWidth;
-    const frameX = Math.floor(x / iconWidth);
-    const frameY = Math.floor(y / iconHeight);
+    const tileWidth = this.props.data.cols;
+    const tileHeight = this.props.data.rows;
+    const maxCols = iconsetWidth / tileWidth;
+    const frameX = Math.floor(x / tileWidth);
+    const frameY = Math.floor(y / tileHeight);
 
     if (frameY > 0) {
       for (let i = -1; i < frameY; i++) {
@@ -68,15 +68,15 @@ export default class Layout extends React.Component {
   drawGrid() {
     const context = this.context;
     // We add 48 (tilesize) to width and height so we draw the last lines on the grid
-    const width = this.image.width + 48;
-    const height = this.image.height + 48;
+    const width = this.image.width + this.props.data.cols;
+    const height = this.image.height + this.props.data.rows;
 
-    for (let x = 0; x < width + 48; x += 48) {
+    for (let x = 0; x < width; x += this.props.data.cols) {
       context.moveTo(0, x);
       context.lineTo(width, x);
     }
 
-    for (let y = 0; y < height; y += 48) {
+    for (let y = 0; y < height; y += this.props.data.rows) {
       context.moveTo(y, 0);
       context.lineTo(y, height);
     }
