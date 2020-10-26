@@ -8,6 +8,8 @@ export default class Layout extends React.Component {
       height: props.height,
       selected: props.data.index,
     };
+    this.mouseX = 0;
+    this.mouseY = 0;
     this.canvas = null;
     this.context = null;
   }
@@ -17,9 +19,10 @@ export default class Layout extends React.Component {
     if (!this.image) {
     this.image = new Image();
     this.image.src = this.getImgPath();
-      this.image.onload = () => {
-        this.refresh();
-      };
+    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+     this.image.onload = () => {
+       this.refresh();
+     };
     }
   }
   onResize() {
@@ -29,7 +32,7 @@ export default class Layout extends React.Component {
     let frame = 0;
     const tileWidth = Number(this.props.data.cols);
     const tileHeight = Number(this.props.data.rows);
-    const maxCols = iconsetWidth / tileWidth;
+    const maxCols = this.image.width / tileWidth;
     const frameX = Math.floor(x / tileWidth);
     const frameY = Math.floor(y / tileHeight);
 
@@ -62,6 +65,7 @@ export default class Layout extends React.Component {
   draw() {
     this.context.drawImage(this.image, 0, 0);
     this.drawGrid();
+    this.drawSelector();
   }
   drawGridByColsRows () {
     const context = this.context;
@@ -87,7 +91,6 @@ export default class Layout extends React.Component {
     context.stroke();
   }
   drawGrid() {
-    console.log(this.props.data);
     if (this.props.data.gridType === "colsRows") {
       this.drawGridByColsRows();
       return;
@@ -95,11 +98,9 @@ export default class Layout extends React.Component {
     const context = this.context;
     const tileWidth = Number(this.props.data.cols);
     const tileHeight = Number(this.props.data.rows);
-
     // We add (tilesize) to width and height so we draw the last lines on the grid
     const width = this.image.width + tileWidth;
     const height = this.image.height + tileHeight;
-    console.log(height)
     for (let x = 0; x < height; x += tileWidth) {
       context.moveTo(0, x);
       context.lineTo(width, x);
@@ -113,8 +114,21 @@ export default class Layout extends React.Component {
     context.strokeStyle = "white";
     context.stroke();
   }
-  onClick(index) {
+  drawSelector() {
+    const frame = this.getFrame(this.mouseX, this.mouseY);
+    const x = frame.x * 48;
+    const y = frame.y * 48; 
+    // draw highlighter
+  }
+  onMouseDown(index) {
     this.setState({ selected: index });
+  }
+  onMouseMove(event) {
+    const x = event.pageX;
+    const y = event.pageY;
+    this.mouseX = x;
+    this.mouseY = y;
+    this.refresh();
   }
   onOk = () => {
     ipcRenderer.send("setFrameIndex", this.state.selected);
