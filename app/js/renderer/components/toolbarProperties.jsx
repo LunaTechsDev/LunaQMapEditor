@@ -170,6 +170,7 @@ export default class ToolbarProperties extends React.Component {
       anchorY,
       filePath,
       type,
+      gridType,
       cols,
       rows,
       index,
@@ -188,7 +189,7 @@ export default class ToolbarProperties extends React.Component {
         {this.transformBlock(scaleX, scaleY, angle)}
         {!isQSprite && this.anchorBlock(anchorX, anchorY)}
         {this.imageBlock(filePath, type, pose, isQSprite)}
-        {this.imageGridTypeBlock(type)}
+        {this.imageGridTypeBlock(type, gridType)}
         {!isQSprite && this.imageGridBlock(type, cols, rows, index, speed)}
         {this.conditionsBlock(conditions)}
         {this.notesBlock(notes)}
@@ -364,15 +365,15 @@ export default class ToolbarProperties extends React.Component {
       </div>
     );
   }
-  imageGridTypeBlock(type) {
+  imageGridTypeBlock(type, gridType) {
     if (type !== "spritesheet" && type !== "animated") return null;
     return (
       <div className="props">
         <div className="half">
           <label htmlFor="gridType">Grid Type</label>
-          <select value={this.props.gridType} onChange={this.onChange} name="gridType">
+          <select value={gridType} onChange={this.onChange} name="gridType">
             <option value="tile">Tile Size</option>
-            <option value="rowsCols">Rows & Cols</option>
+            <option value="colsRows">Rows & Cols</option>
           </select>
         </div>
       </div>
