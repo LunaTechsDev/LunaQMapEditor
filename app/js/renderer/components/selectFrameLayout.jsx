@@ -92,9 +92,6 @@ export default class Layout extends React.Component {
     ipcRenderer.send("setFrameIndex", this.state.selected);
     window.close();
   };
-  updateCanvas(time) {
-    //
-  }
   render() {
     const style = {
       height: this.state.height - 35,
