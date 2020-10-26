@@ -140,13 +140,22 @@ export default class ToolbarProperties extends React.Component {
   };
   openSelectIndex = () => {
     const { projectPath } = this.props;
-    const { filePath, cols, rows, index, height, width } = this.props.mapObject;
+    const {
+      filePath,
+      cols,
+      rows,
+      index,
+      height,
+      width,
+      gridType,
+    } = this.props.mapObject;
     ipcRenderer.send("openSelectFrame", {
       projectPath,
       filePath,
       cols,
       rows,
       index,
+      gridType,
       width: width * cols,
       height: height * rows,
     });

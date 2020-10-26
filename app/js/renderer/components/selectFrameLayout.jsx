@@ -63,7 +63,33 @@ export default class Layout extends React.Component {
     this.context.drawImage(this.image, 0, 0);
     this.drawGrid();
   }
+  drawGridByColsRows () {
+    const context = this.context;
+    const cols = Number(this.props.data.cols);
+    const rows = Number(this.props.data.rows);
+
+    // We add (tilesize) to width and height so we draw the last lines on the grid
+    const width = this.image.width + 48;
+    const height = this.image.height + 48;
+    for (let x = 0; x < height; x += width / cols) {
+      context.moveTo(0, x);
+      context.lineTo(width, x);
+    }
+
+    for (let y = 0; y < width; y += height / rows) {
+      context.moveTo(y, 0);
+      context.lineTo(y, height);
+    }
+
+    context.strokeStyle = "white";
+    context.stroke();
+  }
   drawGrid() {
+    console.log(this.props.data);
+    if (this.props.data.gridType === "colsRows") {
+      this.drawGridByColsRows();
+      return;
+    }
     const context = this.context;
     const tileWidth = Number(this.props.data.cols);
     const tileHeight = Number(this.props.data.rows);
