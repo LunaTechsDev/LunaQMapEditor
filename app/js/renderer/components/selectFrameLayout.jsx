@@ -1,5 +1,7 @@
 import React from "react";
 import { ipcRenderer } from "electron";
+import Store from "../store";
+import * as PIXI from "pixi.js";
 
 export default class Layout extends React.Component {
   constructor(props) {
@@ -11,19 +13,38 @@ export default class Layout extends React.Component {
     this.mouseX = 0;
     this.mouseY = 0;
     this.canvas = null;
-    this.context = null;
+    this.ticker = new PIXI.Ticker();
+    this.loader = props.data.loader;
   }
   componentDidMount() {
     window.onresize = this.onResize.bind(this);
-    this.context = this.canvas.getContext("2d");
-    if (!this.image) {
-    this.image = new Image();
-    this.image.src = this.getImgPath();
-    this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
-     this.image.onload = () => {
-       this.refresh();
-     };
+    this.setupPixi();
+  }
+  setupPixi() {
+    if (this.renderer) {
+      return;
     }
+    this.renderer = new PIXI.Renderer({
+      width: window.innerWidth,
+      height: this.props.height,
+      view: this.canvas,
+      transparent: true,
+      antialias: false,
+    });
+
+    PIXI.Loader.shared.add("tilesheet", this.getImgPath());
+
+    PIXI.Loader.shared.load((loader, resources) => {
+      this.grid = new PIXI.Graphics();
+      this.selector = new PIXI.Graphics()
+      this.stage = new PIXI.Container();
+      this.image = new PIXI.Sprite(resources.tilesheet.texture);
+      this.stage.addChild(this.image, this.grid, this.selector);
+
+      this.refresh();
+      this.ticker.add(this.update.bind(this));
+      this.ticker.start();
+    });
   }
   onResize() {
     this.setState({ height: window.innerHeight });
@@ -57,68 +78,62 @@ export default class Layout extends React.Component {
     return this.props.data.projectPath + "\\" + filePath;
   }
   refresh() {
-    this.canvas.width = this.image.width;
-    this.canvas.height = this.image.height;
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.draw();
   }
   draw() {
-    this.context.drawImage(this.image, 0, 0);
     this.drawGrid();
     this.drawSelector();
   }
-  drawGridByColsRows () {
-    const context = this.context;
-    const cols = Number(this.props.data.cols);
-    const rows = Number(this.props.data.rows);
-
-    // We add (tilesize) to width and height so we draw the last lines on the grid
-    const width = this.image.width + 48;
-    const height = this.image.height + 48;
-    const frameW = this.image.width / cols;
-    const frameH =  this.image.height / rows;
-    for (let x = 0; x < height; x += frameW) {
-      context.moveTo(0, x);
-      context.lineTo(width, x);
-    }
-
-    for (let y = 0; y < width; y += frameH) {
-      context.moveTo(y, 0);
-      context.lineTo(y, height);
-    }
-
-    context.strokeStyle = "white";
-    context.stroke();
-  }
   drawGrid() {
+    this.grid.clear();
+    this.grid.lineStyle(1, 0xffffff)
     if (this.props.data.gridType === "colsRows") {
       this.drawGridByColsRows();
       return;
     }
-    const context = this.context;
     const tileWidth = Number(this.props.data.cols);
     const tileHeight = Number(this.props.data.rows);
-    // We add (tilesize) to width and height so we draw the last lines on the grid
-    const width = this.image.width + tileWidth;
-    const height = this.image.height + tileHeight;
-    for (let x = 0; x < height; x += tileWidth) {
-      context.moveTo(0, x);
-      context.lineTo(width, x);
+    const width = this.image.width;
+    const height = this.image.height;
+
+    for (let x = 0; x < height + tileWidth; x += tileWidth) {
+      this.grid.moveTo(0, x);
+      this.grid.lineTo(width, x);
     }
 
-    for (let y = 0; y < width; y += tileHeight) {
-      context.moveTo(y, 0);
-      context.lineTo(y, height);
+    for (let y = 0; y < width + tileHeight; y += tileHeight) {
+      this.grid.moveTo(y, 0);
+      this.grid.lineTo(y, height);
     }
+    this.grid.endFill();
+  }
+  drawGridByColsRows() {
+    const cols = Number(this.props.data.cols);
+    const rows = Number(this.props.data.rows);
+    const width = this.image.width + 48;
+    const height = this.image.height + 48;
+    const frameW = this.image.width / cols;
+    const frameH = this.image.height / rows;
 
-    context.strokeStyle = "white";
-    context.stroke();
+    for (let x = 0; x < height + frameW; x += frameW) {
+      this.grid.moveTo(0, x);
+      this.grid.lineTo(width, x);
+    }
+    
+    for (let y = 0; y < width + frameH; y += frameH) {
+      this.grid.moveTo(y, 0);
+      this.grid.lineTo(y, height);
+    }
+    this.grid.endFill();
   }
   drawSelector() {
     const frame = this.getFrame(this.mouseX, this.mouseY);
-    const x = frame.x * 48;
-    const y = frame.y * 48; 
-    // draw highlighter
+    const x = frame * 48;
+    const y = frame * 48;
+    this.selector.lineStyle(1, 0xffffff);
+    this.selector.beginFill(0xffffff, 0);
+    this.selector.drawRect(x, y, x + 48, y + 48);
+    this.selector.endFill();
   }
   onMouseDown(index) {
     this.setState({ selected: index });
@@ -134,6 +149,9 @@ export default class Layout extends React.Component {
     ipcRenderer.send("setFrameIndex", this.state.selected);
     window.close();
   };
+  update() {
+    this.renderer.render(this.stage);
+  }
   render() {
     const style = {
       height: this.state.height - 35,
@@ -143,7 +161,7 @@ export default class Layout extends React.Component {
     return (
       <div>
         <div className="frameSelect" style={style}>
-          <canvas ref={(c) => this.canvas = c}></canvas>
+          <canvas ref={(c) => (this.canvas = c)}></canvas>
         </div>
         <div className="fixedRight">
           <button onClick={this.onOk}>Ok</button>
