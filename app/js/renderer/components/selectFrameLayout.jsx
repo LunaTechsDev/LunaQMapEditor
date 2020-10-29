@@ -62,12 +62,12 @@ export default class Layout extends React.Component {
     const tileHeight = isTile ? Number(this.props.data.rows) : 48;
     const maxCols = isTile
       ? this.image.width / tileWidth
-      : this.props.data.rows;
+      : this.props.data.cols;
     const frameX = Math.floor(x / tileWidth);
     const frameY = Math.floor(y / tileHeight);
 
     if (frameY > 0) {
-      for (let i = 0; i < frameY; i++) {
+      for (let i = -1; i < frameY; i++) {
         frame += maxCols;
       }
       frame = frame - Math.abs(frameX - maxCols);
