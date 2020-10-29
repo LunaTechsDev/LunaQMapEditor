@@ -36,7 +36,7 @@ export default class Layout extends React.Component {
 
     PIXI.Loader.shared.load((loader, resources) => {
       this.grid = new PIXI.Graphics();
-      this.selector = new PIXI.Graphics()
+      this.selector = new PIXI.Graphics();
       this.stage = new PIXI.Container();
       this.image = new PIXI.Sprite(resources.tilesheet.texture);
 
@@ -59,7 +59,7 @@ export default class Layout extends React.Component {
     const isTile = this.props.data.gridType === "tile";
     let frame = 0;
     const tileWidth = isTile ? Number(this.props.data.cols) : 48;
-    const tileHeight = isTile ? Number(this.props.data.rows): 48;
+    const tileHeight = isTile ? Number(this.props.data.rows) : 48;
     const maxCols = isTile
       ? this.image.width / tileWidth
       : this.props.data.rows;
@@ -78,8 +78,8 @@ export default class Layout extends React.Component {
     return {
       x: frameX * tileWidth,
       y: frameY * tileHeight,
-      frame
-    }
+      frame,
+    };
   }
   getImgPath() {
     let filePath = this.props.data.filePath.split("\\");
@@ -99,7 +99,7 @@ export default class Layout extends React.Component {
   }
   drawGrid() {
     this.grid.clear();
-    this.grid.lineStyle(1, 0xffffff)
+    this.grid.lineStyle(1, 0xffffff);
     if (this.props.data.gridType === "colsRows") {
       this.drawGridByColsRows();
       return;
@@ -148,7 +148,6 @@ export default class Layout extends React.Component {
     this.selector.endFill();
   }
   onClick() {
-    console.log('clicked')
     this.setState({ selected: this.getFrame(this.mouseX, this.mouseY).frame });
   }
   onMouseMove(event) {
