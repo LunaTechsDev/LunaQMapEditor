@@ -39,6 +39,10 @@ export default class Layout extends React.Component {
       this.selector = new PIXI.Graphics()
       this.stage = new PIXI.Container();
       this.image = new PIXI.Sprite(resources.tilesheet.texture);
+
+      this.grid.interactive = true;
+      this.grid.on("mousemove", this.onMouseMove.bind(this));
+
       this.stage.addChild(this.image, this.grid, this.selector);
 
       this.refresh();
@@ -50,15 +54,18 @@ export default class Layout extends React.Component {
     this.setState({ height: window.innerHeight });
   }
   getFrame(x, y) {
+    const isTile = this.props.data.gridType === "tile";
     let frame = 0;
-    const tileWidth = Number(this.props.data.cols);
-    const tileHeight = Number(this.props.data.rows);
-    const maxCols = this.image.width / tileWidth;
+    const tileWidth = isTile ? Number(this.props.data.cols) : 48;
+    const tileHeight = isTile ? Number(this.props.data.rows): 48;
+    const maxCols = isTile
+      ? this.image.width / tileWidth
+      : this.props.data.rows;
     const frameX = Math.floor(x / tileWidth);
     const frameY = Math.floor(y / tileHeight);
 
     if (frameY > 0) {
-      for (let i = -1; i < frameY; i++) {
+      for (let i = 0; i < frameY; i++) {
         frame += maxCols;
       }
       frame = frame - Math.abs(frameX - maxCols);
@@ -66,7 +73,11 @@ export default class Layout extends React.Component {
       frame = frameX;
     }
 
-    return frame;
+    return {
+      x: frameX * tileWidth,
+      y: frameY * tileHeight,
+      frame
+    }
   }
   getImgPath() {
     let filePath = this.props.data.filePath.split("\\");
@@ -128,22 +139,20 @@ export default class Layout extends React.Component {
   }
   drawSelector() {
     const frame = this.getFrame(this.mouseX, this.mouseY);
-    const x = frame * 48;
-    const y = frame * 48;
-    this.selector.lineStyle(1, 0xffffff);
-    this.selector.beginFill(0xffffff, 0);
-    this.selector.drawRect(x, y, x + 48, y + 48);
+    this.selector.clear();
+    this.selector.lineStyle(2, 0x03a1fc);
+    this.selector.drawRect(frame.x, frame.y, 48, 48);
     this.selector.endFill();
   }
   onMouseDown(index) {
     this.setState({ selected: index });
   }
   onMouseMove(event) {
-    const x = event.pageX;
-    const y = event.pageY;
+    const x = event.data.global.x;
+    const y = event.data.global.y;
     this.mouseX = x;
     this.mouseY = y;
-    this.refresh();
+    this.drawSelector();
   }
   onOk = () => {
     ipcRenderer.send("setFrameIndex", this.state.selected);
