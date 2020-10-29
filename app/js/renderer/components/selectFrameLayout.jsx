@@ -41,7 +41,9 @@ export default class Layout extends React.Component {
       this.image = new PIXI.Sprite(resources.tilesheet.texture);
 
       this.grid.interactive = true;
+      this.selector.interactive = true;
       this.grid.on("mousemove", this.onMouseMove.bind(this));
+      this.selector.on("click", this.onClick.bind(this));
 
       this.stage.addChild(this.image, this.grid, this.selector);
 
@@ -130,7 +132,7 @@ export default class Layout extends React.Component {
       this.grid.moveTo(0, x);
       this.grid.lineTo(width, x);
     }
-    
+
     for (let y = 0; y < width + frameH; y += frameH) {
       this.grid.moveTo(y, 0);
       this.grid.lineTo(y, height);
@@ -141,11 +143,13 @@ export default class Layout extends React.Component {
     const frame = this.getFrame(this.mouseX, this.mouseY);
     this.selector.clear();
     this.selector.lineStyle(2, 0x03a1fc);
+    this.selector.beginFill(0x03a1fc, 0.2);
     this.selector.drawRect(frame.x, frame.y, 48, 48);
     this.selector.endFill();
   }
-  onMouseDown(index) {
-    this.setState({ selected: index });
+  onClick() {
+    console.log('clicked')
+    this.setState({ selected: this.getFrame(this.mouseX, this.mouseY).frame });
   }
   onMouseMove(event) {
     const x = event.data.global.x;
