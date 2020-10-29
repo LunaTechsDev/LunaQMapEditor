@@ -12,6 +12,7 @@ export default {
   height: 0,
   filePath: "",
   type: "full",
+  gridType: "colsRows",
   cols: 1,
   rows: 1,
   index: 0,

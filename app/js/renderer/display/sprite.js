@@ -238,7 +238,7 @@ export default class Sprite extends PIXI.Sprite {
       this.anchor.y = Number(object.anchorY);
       this.drawData();
     }
-    if (name === "cols" || name === "rows" || name === "index") {
+    if (name === "cols" || name === "rows" || name === "index" || name === "gridType") {
       this.setSprite(this._realTexture);
       this.drawData();
     }
@@ -291,13 +291,13 @@ export default class Sprite extends PIXI.Sprite {
     const { cols, rows, anchorX, anchorY } = this._qSprite
       ? this._qSprite.config
       : this._obj;
-    const { scaleX, scaleY } = this._obj;
+    const { scaleX, scaleY, gridType } = this._obj;
     this.updateFrame();
     this._dataGraphic.clear();
     let width = this.texture.baseTexture.width;
     let height = this.texture.baseTexture.height;
-    width = Math.floor(width / cols);
-    height = Math.floor(height / rows);
+    width = Math.floor(gridType === "tile" ? Number(cols) : width / cols);
+    height = Math.floor(gridType === "tile" ? Number(rows) : height / rows);
     const ox = anchorX * width;
     const oy = anchorY * height;
     // edges
@@ -415,13 +415,20 @@ export default class Sprite extends PIXI.Sprite {
     this._obj.width = 0;
     this._obj.height = 0;
     if (!texture) return;
-    const { cols, rows } = this._qSprite ? this._qSprite.config : this._obj;
-    const frameW = texture.width / cols;
-    const frameH = texture.height / rows;
+    let { cols, rows, gridType } = this._qSprite ? this._qSprite.config : this._obj;
+    const frameW = gridType === 'tile' ? Number(cols) : texture.width / cols;
+    const frameH = gridType === 'tile' ? Number(rows) : texture.height / rows;
+    if (gridType === "tile") {
+      rows = texture.width / cols;
+      cols = texture.height / rows;
+    }
     for (let y = 0; y < rows; y++) {
       const y1 = y * frameH;
       for (let x = 0; x < cols; x++) {
         const x1 = x * frameW;
+        if (x1 >= texture.width && gridType === "tile") {
+          break;
+        }
         const frame = new PIXI.Rectangle(x1, y1, frameW, frameH);
         this._frames.push(new PIXI.Texture(texture, frame));
       }

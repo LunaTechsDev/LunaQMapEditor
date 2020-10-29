@@ -140,13 +140,22 @@ export default class ToolbarProperties extends React.Component {
   };
   openSelectIndex = () => {
     const { projectPath } = this.props;
-    const { filePath, cols, rows, index, height, width } = this.props.mapObject;
+    const {
+      filePath,
+      cols,
+      rows,
+      index,
+      height,
+      width,
+      gridType,
+    } = this.props.mapObject;
     ipcRenderer.send("openSelectFrame", {
       projectPath,
       filePath,
       cols,
       rows,
       index,
+      gridType,
       width: width * cols,
       height: height * rows,
     });
@@ -170,6 +179,7 @@ export default class ToolbarProperties extends React.Component {
       anchorY,
       filePath,
       type,
+      gridType,
       cols,
       rows,
       index,
@@ -188,6 +198,7 @@ export default class ToolbarProperties extends React.Component {
         {this.transformBlock(scaleX, scaleY, angle)}
         {!isQSprite && this.anchorBlock(anchorX, anchorY)}
         {this.imageBlock(filePath, type, pose, isQSprite)}
+        {this.imageGridTypeBlock(type, gridType)}
         {!isQSprite && this.imageGridBlock(type, cols, rows, index, speed)}
         {this.conditionsBlock(conditions)}
         {this.notesBlock(notes)}
@@ -358,6 +369,20 @@ export default class ToolbarProperties extends React.Component {
           <select value={pose} onChange={this.onChange} name="pose">
             <option value=""></option>
             {list}
+          </select>
+        </div>
+      </div>
+    );
+  }
+  imageGridTypeBlock(type, gridType) {
+    if (type !== "spritesheet" && type !== "animated") return null;
+    return (
+      <div className="props">
+        <div className="half">
+          <label htmlFor="gridType">Grid Type</label>
+          <select value={gridType} onChange={this.onChange} name="gridType">
+            <option value="tile">Tile Size</option>
+            <option value="colsRows">Rows & Cols</option>
           </select>
         </div>
       </div>
