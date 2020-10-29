@@ -37,6 +37,7 @@ export default class Layout extends React.Component {
     PIXI.Loader.shared.load((loader, resources) => {
       this.grid = new PIXI.Graphics();
       this.selector = new PIXI.Graphics();
+      this.selectedFrame = new PIXI.Graphics();
       this.stage = new PIXI.Container();
       this.image = new PIXI.Sprite(resources.tilesheet.texture);
 
@@ -45,7 +46,12 @@ export default class Layout extends React.Component {
       this.grid.on("mousemove", this.onMouseMove.bind(this));
       this.selector.on("click", this.onClick.bind(this));
 
-      this.stage.addChild(this.image, this.grid, this.selector);
+      this.stage.addChild(
+        this.image,
+        this.grid,
+        this.selector,
+        this.selectedFrame
+      );
 
       this.refresh();
       this.ticker.add(this.update.bind(this));
@@ -95,7 +101,7 @@ export default class Layout extends React.Component {
   }
   draw() {
     this.drawGrid();
-    this.drawSelector();
+    this.drawSelected();
   }
   drawGrid() {
     this.grid.clear();
@@ -147,8 +153,21 @@ export default class Layout extends React.Component {
     this.selector.drawRect(frame.x, frame.y, 48, 48);
     this.selector.endFill();
   }
+  drawSelected() {
+    const frame = this.state.selected;
+    this.selectedFrame.clear();
+    this.selectedFrame.lineStyle(2, 0x03a1fc);
+    this.selectedFrame.beginFill(0x03a1fc, 0.2);
+    const framesPerRow = this.image.width / 48
+    const framesPerCol = this.image.height / 48
+    const y = Math.round(frame / framesPerRow) * 48;
+    const x = Math.round(frame % framesPerCol) * 48;
+    this.selectedFrame.drawRect(x, y, 48, 48);
+    this.selectedFrame.endFill();
+  }
   onClick() {
     this.setState({ selected: this.getFrame(this.mouseX, this.mouseY).frame });
+    this.drawSelected()
   }
   onMouseMove(event) {
     const x = event.data.global.x;
