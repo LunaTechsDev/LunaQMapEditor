@@ -31,7 +31,7 @@ class Stage extends PIXI.Container {
     this._objContainer = new PIXI.Container();
     this.addChild(this._objContainer);
     this._mapGrid = new PIXI.Graphics();
-    this._mapGrid.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+    this._mapGrid.blendMode = PIXI.BLEND_MODES.OVERLAY;
     this.addChild(this._mapGrid);
     this._mapEvents = new PIXI.Container();
     this.addChild(this._mapEvents);
@@ -51,8 +51,8 @@ class Stage extends PIXI.Container {
       this.alpha = 1;
       this.setSize(Store.mapData.width, Store.mapData.height);
       this.setObjects(Store.mapObjects);
-      this.drawMapBG();
       this.drawMapTiles();
+      this.drawMapBG();
       this.drawMapEvents(Store.mapData.events);
       this._observing = observe(
         Store.mapObjects,
@@ -90,7 +90,7 @@ class Stage extends PIXI.Container {
     this._mapBG.drawRect(0, 0, fullMapWidth, fullMapHeight);
     this._mapBG.endFill();
     this._mapGrid.clear();
-    this._mapGrid.lineStyle(1, TILE_OUTLINE, 1);
+    this._mapGrid.lineStyle(1, TILE_OUTLINE, 0.5);
     for (let x = 0; x <= this._mapWidth; x++) {
       this._mapGrid.moveTo(x * this._gridWidth, 0);
       this._mapGrid.lineTo(x * this._gridWidth, fullMapHeight);
