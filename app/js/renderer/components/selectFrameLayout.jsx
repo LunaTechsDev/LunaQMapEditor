@@ -62,10 +62,11 @@ export default class Layout extends React.Component {
     this.setState({ height: window.innerHeight });
   }
   getFrame(x, y) {
-    const isTile = this.props.data.gridType === "tile";
     let frame = 0;
-    const tileWidth = isTile ? Number(this.props.data.cols) : 48;
-    const tileHeight = isTile ? Number(this.props.data.rows) : 48;
+    const isTile = this.props.data.gridType === "tile";
+    const tileSize = this.getTilesize();
+    const tileWidth = tileSize.width;
+    const tileHeight = tileSize.height;
     const maxCols = isTile
       ? this.image.width / tileWidth
       : this.props.data.cols;
@@ -147,23 +148,34 @@ export default class Layout extends React.Component {
   }
   drawSelector() {
     const frame = this.getFrame(this.mouseX, this.mouseY);
+    const tileSize = this.getTilesize();
     this.selector.clear();
     this.selector.lineStyle(2, 0x03a1fc);
     this.selector.beginFill(0x03a1fc, 0.2);
-    this.selector.drawRect(frame.x, frame.y, 48, 48);
+    this.selector.drawRect(frame.x, frame.y, tileSize.width, tileSize.height);
     this.selector.endFill();
   }
   drawSelected() {
     const frame = this.state.selected;
+    const tileSize = this.getTilesize();
     this.selectedFrame.clear();
     this.selectedFrame.lineStyle(2, 0x03a1fc);
     this.selectedFrame.beginFill(0x03a1fc, 0.2);
-    const framesPerRow = this.image.width / 48
-    const framesPerCol = this.image.height / 48
+    const framesPerRow = this.image.width / tileSize.width
+    const framesPerCol = this.image.height / tileSize.height
     const y = Math.round(frame / framesPerRow) * 48;
     const x = Math.round(frame % framesPerCol) * 48;
-    this.selectedFrame.drawRect(x, y, 48, 48);
+    this.selectedFrame.drawRect(x, y, tileSize.width, tileSize.height);
     this.selectedFrame.endFill();
+  }
+  getTilesize() {
+    const isTile = this.props.data.gridType === "tile";
+    const cols = Number(this.props.data.cols);
+    const rows = Number(this.props.data.rows);
+    const frameWidth = isTile ? rows : this.image.width / rows;
+    const frameHeight = isTile ? cols : this.image.height / cols;
+
+    return { width: frameWidth, height: frameHeight };
   }
   onClick() {
     this.setState({ selected: this.getFrame(this.mouseX, this.mouseY).frame });
