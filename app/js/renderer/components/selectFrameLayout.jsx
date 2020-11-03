@@ -161,11 +161,7 @@ export default class Layout extends React.Component {
     this.selectedFrame.clear();
     this.selectedFrame.lineStyle(2, 0x03a1fc);
     this.selectedFrame.beginFill(0x03a1fc, 0.2);
-    const framesPerRow = this.image.width / tileSize.width
-    const framesPerCol = this.image.height / tileSize.height
-    const y = Math.round(frame / framesPerRow) * 48;
-    const x = Math.round(frame % framesPerCol) * 48;
-    this.selectedFrame.drawRect(x, y, tileSize.width, tileSize.height);
+    this.selectedFrame.drawRect(frame.x, frame.y, tileSize.width, tileSize.height);
     this.selectedFrame.endFill();
   }
   getTilesize() {
@@ -178,7 +174,7 @@ export default class Layout extends React.Component {
     return { width: frameWidth, height: frameHeight };
   }
   onClick() {
-    this.setState({ selected: this.getFrame(this.mouseX, this.mouseY).frame });
+    this.setState({ selected: this.getFrame(this.mouseX, this.mouseY) });
     this.drawSelected()
   }
   onMouseMove(event) {
@@ -189,7 +185,7 @@ export default class Layout extends React.Component {
     this.drawSelector();
   }
   onOk = () => {
-    ipcRenderer.send("setFrameIndex", this.state.selected);
+    ipcRenderer.send("setFrameIndex", this.state.selected.frame);
     window.close();
   };
   update() {
