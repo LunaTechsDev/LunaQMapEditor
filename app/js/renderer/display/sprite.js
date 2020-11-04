@@ -418,12 +418,17 @@ export default class Sprite extends PIXI.Sprite {
     let { cols, rows, gridType } = this._qSprite ? this._qSprite.config : this._obj;
     const frameW = gridType === 'tile' ? Number(cols) : texture.width / cols;
     const frameH = gridType === 'tile' ? Number(rows) : texture.height / rows;
+
     if (gridType === "tile") {
-      rows = texture.width / cols;
-      cols = texture.height / rows;
+      rows = texture.width / frameW;
+      cols = texture.height / frameH;
     }
+
     for (let y = 0; y < rows; y++) {
       const y1 = y * frameH;
+      if (y1 >= texture.height && gridType === "tile") {
+        break;
+      }
       for (let x = 0; x < cols; x++) {
         const x1 = x * frameW;
         if (x1 >= texture.width && gridType === "tile") {
