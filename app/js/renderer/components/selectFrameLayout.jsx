@@ -149,6 +149,9 @@ export default class Layout extends React.Component {
   drawSelector() {
     const frame = this.getFrame(this.mouseX, this.mouseY);
     const tileSize = this.getTilesize();
+    if (this.mouseX >= this.image.width || this.mouseY >= this.image.height) {
+      return;
+    }
     this.selector.clear();
     this.selector.lineStyle(2, 0x03a1fc);
     this.selector.beginFill(0x03a1fc, 0.2);
